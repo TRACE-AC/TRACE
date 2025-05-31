@@ -1,0 +1,44 @@
+int func(vector<int> &v, int x)
+{
+    int n = v.size();
+    int ans = 1e9 + 10;
+    map<int, set<int>> m;
+    multiset<int> s;
+
+    for(int i = n - 1; i >= x; i--) {
+        m[v[i]].insert(i);
+        s.insert(v[i]);
+    }
+    
+    for(int i = 0; i < n - x; i++) {
+        auto it = s.lower_bound(v[i]);
+        if(it != s.end()) {
+            int key = *it;
+            ans = min(ans, abs(key - v[i]));
+        }
+
+        int del = v[i + x];
+        it = s.find(del);
+        if(it != s.end()) {
+            s.erase(it);
+            m[del].erase(i + x);
+            if(m[del].size() == 0) {
+                m.erase(del);
+            }
+        }
+    }
+
+    return ans;
+}
+
+class Solution {
+public:
+    int minAbsoluteDifference(vector<int>& v, int x) 
+    {
+        int ans = 1e9 + 10;
+        ans = min(ans, func(v, x));
+        reverse(v.begin(), v.end());
+        ans = min(ans, func(v, x));
+        return ans;
+    }
+};

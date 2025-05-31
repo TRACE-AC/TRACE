@@ -1,0 +1,43 @@
+class Solution {
+public:
+    bool isRectangleCover(vector<vector<int>>& rectangles) {
+        map<pair<int,int>,int> m;
+        long long area = 0, expectedArea = 0;
+        int x1 = INT_MAX, y1 = INT_MAX, x2 = INT_MIN, y2 = INT_MIN;
+        
+        for(auto it : rectangles){
+            x1 = min(x1, it[0]);
+            y1 = min(y1, it[1]);
+            x2 = max(x2, it[2]);
+            y2 = max(y2, it[3]);
+            area += (long long)(it[2] - it[0]) * (long long)(it[3] - it[1]);
+            
+            m[{it[0], it[1]}]++;
+            m[{it[2], it[3]}]++;
+            m[{it[0], it[3]}]++;
+            m[{it[2], it[1]}]++;
+        }
+        
+        expectedArea = (long long)(x2 - x1) * (long long)(y2 - y1);
+        if(area != expectedArea) return false;
+        
+        int cornerCnt = 0;
+        for(auto it = m.begin(); it != m.end(); it++){
+            // A tool should have a count of 1
+            if(it->second == 1) {
+                cornerCnt++;
+                
+                // Validate if these are corners of the larger rectangle
+                if((it->first.first != x1 && it->first.first != x2) ||
+                   (it->first.second != y1 && it->first.second != y2)) {
+                    return false;
+                }
+            } else if (it->second % 2 != 0) {
+                // All other points should have even counts
+                return false;
+            }
+        }
+        
+        return cornerCnt == 4;
+    }
+};

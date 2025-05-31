@@ -1,0 +1,13 @@
+class Solution:
+    def increasingBST(self, root: TreeNode) -> TreeNode:
+        newRoot = TreeNode(0)
+        self.temp = newRoot
+        def inorder(root):
+            if root is None: return None
+            inorder(root.left)
+            new = TreeNode(root.val)
+            self.temp.right = new
+            self.temp = self.temp.right
+            inorder(root.right)
+        inorder(root)
+        return newRoot.right

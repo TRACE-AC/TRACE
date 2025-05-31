@@ -1,0 +1,15 @@
+class Solution:
+    def findLonely(self, nums: List[int]) -> List[int]:
+        from collections import defaultdict
+        dic = defaultdict(int)
+        res = []
+        
+        for i in nums:
+            dic[i] += 1
+        
+        for i in nums:
+            if dic.get(i) == 1:
+                if i - 1 not in dic and i + 1 not in dic:
+                    res.append(i)
+        
+        return res

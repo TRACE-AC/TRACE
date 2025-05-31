@@ -1,0 +1,17 @@
+class Solution:
+    def longestString(self, x: int, y: int, z: int) -> int:
+        # We can use all 'AB' strings directly, each contributes 2 to length
+        ab_length = z * 2
+        
+        # Consider the minimum of x or y to utilize 'AA' and 'BB' strings effectively
+        min_xy = min(x, y)
+        
+        # Maximize using pairs of 'AA' and 'BB', each contributes 2 to length and avoids "AAA"/"BBB"
+        max_length = min_xy * 4 # 2 for 'AA' and 2 for 'BB'
+        
+        # Adjust if there is an imbalance or leftover in 'AA'/'BB' terms beyond matching pairs
+        if x != y:
+            max_length += 2
+        
+        # Total length includes combinations of 'AB' and the adjusted sequence of 'AA'/'BB'
+        return ab_length + max_length

@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int longestSubarray(vector<int>& nums, int limit) {
+        int ans = 0, l = 0, h = 0;
+        map<int, int> mp;
+
+        while (h < nums.size()) {
+            mp[nums[h]]++;
+            
+            while (prev(mp.end())->first - mp.begin()->first > limit) {
+                mp[nums[l]]--;
+                if (mp[nums[l]] == 0) {
+                    mp.erase(nums[l]);
+                }
+                l++;
+            }
+            
+            ans = max(ans, h - l + 1);
+            h++;
+        }
+
+        return ans;
+    }
+};

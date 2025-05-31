@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int bfsCycle(int start, unordered_map<int, vector<int>>& adjList, int nodeCount) {
+        vector<int> dist(nodeCount, -1);  // Distance from start node
+        vector<int> parent(nodeCount, -1);  // Track parent nodes for cycle verification
+        queue<pair<int, int>> q;
+        q.push({start, 0});
+        dist[start] = 0;
+
+        while (!q.empty()) {
+            auto [current, distance] = q.front();
+            q.pop();
+
+            for (int neighbor : adjList[current]) {
+                if (dist[neighbor] == -1) {  // Not visited
+                    dist[neighbor] = distance + 1;
+                    parent[neighbor] = current;
+                    q.push({neighbor, distance + 1});
+                } else if (neighbor != parent[current] && dist[neighbor] <= distance) {
+                    // Valid cycle detection; ensures it's not just reversing the last step
+                    return dist[current] + dist[neighbor] + 1;
+                }
+            }
+        }
+        return nodeCount + 1;  // Return value larger than possible cycle length
+    }
+
+    int findShortestCycle(int n, vector<vector<int>>& edges) {
+        unordered_map<int, vector<int>> adjList;
+        for (const auto& edge : edges) {
+            adjList[edge[0]].push_back(edge[1]);
+            adjList[edge[1]].push_back(edge[0]);
+        }
+
+        int minCycleLength = n + 1;
+        for (int i = 0; i < n; ++i) {
+            minCycleLength = min(minCycleLength, bfsCycle(i, adjList, n));
+        }
+
+        return minCycleLength > n ? -1 : minCycleLength;
+    }
+};

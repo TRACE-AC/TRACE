@@ -1,0 +1,23 @@
+class Solution {
+    public void dfs(Node node, HashMap<Node, Node> dict) {
+        if (node == null) return; // Insert Null Pointer Checker
+
+        for (Node nd : node.neighbors) {
+            if (!dict.containsKey(nd)) {
+                dict.put(nd, new Node(nd.val));
+                dfs(nd, dict); // Proceed with deeper recursion for unvisited nodes
+            }
+            dict.get(node).neighbors.add(dict.get(nd));
+        }
+    }
+    
+    public Node cloneGraph(Node node) {
+        HashMap<Node, Node> dict = new HashMap<>();
+        if (node != null) {
+            dict.put(node, new Node(node.val));
+            dfs(node, dict);
+            return dict.get(node);
+        }
+        return null;
+    }
+}

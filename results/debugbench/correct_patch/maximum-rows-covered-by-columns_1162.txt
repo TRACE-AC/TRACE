@@ -1,0 +1,58 @@
+class Solution {
+public:
+    vector<vector<int>>comb;
+    
+    int countCoveredRows(vector<vector<int>>& mat, vector<int>& selectedCols)
+    {
+        int coveredRows = 0;
+        for(int i = 0; i < mat.size(); i++)
+        {
+            bool isCovered = true;
+            for(int j = 0; j < mat[0].size(); j++)
+            {
+                if(mat[i][j] == 1 && find(selectedCols.begin(), selectedCols.end(), j) == selectedCols.end())
+                {
+                    isCovered = false;
+                    break;
+                }
+            }
+            if(isCovered)
+                coveredRows++;
+        }
+        return coveredRows;
+    }
+    
+    int find_ans(vector<vector<int>>& mat)
+    {
+        int maxCoveredRows = 0;
+        for(int i = 0; i < comb.size(); i++)
+        {
+            vector<int> selectedCols = comb[i];
+            maxCoveredRows = max(maxCoveredRows, countCoveredRows(mat, selectedCols));
+        }
+        return maxCoveredRows;
+    }
+    
+    void helper(vector<vector<int>>& mat, int cols, int count, int idx, vector<int>tans)
+    {
+        int col = mat[0].size();
+        if(count == cols)
+        {
+            comb.push_back(tans);
+            return;
+        }
+        if(idx >= col)
+            return;
+        
+        helper(mat, cols, count, idx+1, tans);
+        tans.push_back(idx);
+        helper(mat, cols, count+1, idx+1, tans);
+    }
+    
+    int maximumRows(vector<vector<int>>& mat, int cols) {
+        
+        vector<int>tans;
+        helper(mat, cols, 0, 0, tans);
+        return find_ans(mat);
+    }
+};

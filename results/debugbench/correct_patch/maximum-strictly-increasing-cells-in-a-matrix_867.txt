@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int maxIncreasingCells(vector<vector<int>>& mat) {
+        int n = mat.size(), m = mat[0].size();
+        vector<int> row_max(n, 0), col_max(m, 0);
+        
+        map<int, vector<pair<int, int>>, greater<int>> pos;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                pos[mat[i][j]].push_back({i, j});
+            }
+        }
+        
+        int ans = 0;
+        for (auto it = pos.begin(); it != pos.end(); ++it) {
+            int k = it->second.size();
+            vector<int> next(k);
+            for (int i = 0; i < k; ++i) {
+                int r = it->second[i].first, c = it->second[i].second;
+                next[i] = max(row_max[r], col_max[c]) + 1;
+            }
+
+            // Ensures all moves are considered and accounts for improvement in path lengths with same values
+            for (int i = 0; i < k; ++i) {
+                int r = it->second[i].first, c = it->second[i].second;
+                ans = max(ans, next[i]);
+                row_max[r] = max(row_max[r], next[i]);
+                col_max[c] = max(col_max[c], next[i]);
+            }
+        }
+        return ans;
+    }
+};

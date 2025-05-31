@@ -1,0 +1,25 @@
+from itertools import chain
+from functools import lru_cache
+from typing import List
+
+class Solution:
+    def minCost(self, n: int, cuts: List[int]) -> int:
+        
+        cuts = sorted(cuts + [0, n])
+        
+        @lru_cache(None)
+        def dfs(l, r):
+            if l + 1 >= r:  # No cuts possible between l and r
+                return 0
+            
+            length = cuts[r] - cuts[l]
+            min_cost = float('inf')
+
+            # Explore potential cuts and calculate minimum cost
+            for i in range(l+1, r):
+                current_cost = dfs(l, i) + dfs(i, r) + length
+                min_cost = min(min_cost, current_cost)
+            
+            return min_cost
+        
+        return dfs(0, len(cuts) - 1)

@@ -1,0 +1,26 @@
+class Solution:
+    def isWinner(self, nums1: List[int], nums2: List[int]) -> int:
+        def calculate_score(nums: List[int]) -> int:
+            score = 0
+            bonus = [False] * len(nums)
+            
+            for i in range(len(nums)):
+                if nums[i] == 10:
+                    if i < len(nums) - 1:
+                        bonus[i + 1] = True
+                    if i < len(nums) - 2:
+                        bonus[i + 2] = True
+                    
+                score += nums[i] * 2 if bonus[i] else nums[i]
+                
+            return score
+        
+        res1 = calculate_score(nums1)
+        res2 = calculate_score(nums2)
+        
+        if res1 > res2:
+            return 1
+        elif res1 < res2:
+            return 2
+        else:
+            return 0

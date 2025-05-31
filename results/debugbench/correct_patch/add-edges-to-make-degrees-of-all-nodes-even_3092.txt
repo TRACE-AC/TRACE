@@ -1,0 +1,31 @@
+class Solution:
+    def isPossible(self, n: int, edges: List[List[int]]) -> bool:
+        neighbors = [set() for _ in range(n)]
+        for edge in edges:
+            a, b = edge
+            a -= 1
+            b -= 1
+            neighbors[a].add(b)
+            neighbors[b].add(a)
+        oddDegreesNodes = [i for i in range(n) if (len(neighbors[i]) % 2 == 1)]
+        numOdd = len(oddDegreesNodes)
+        
+        # No odd-degree nodes
+        if numOdd == 0:
+            return True
+        # Exactly two odd-degree nodes
+        elif numOdd == 2:
+            o1, o2 = oddDegreesNodes
+            # Check if adding a direct edge could help
+            if o1 not in neighbors[o2]:
+                return True
+            # Simplified logic for potential connections
+            bothConnectedTo = neighbors[o1] | neighbors[o2]
+            return len(bothConnectedTo) < n
+        # Exactly four odd-degree nodes
+        elif numOdd == 4:
+            o1, o2, o3, o4 = oddDegreesNodes
+            return (o1 not in neighbors[o2] and o3 not in neighbors[o4]) or \
+                   (o1 not in neighbors[o3] and o2 not in neighbors[o4]) or \
+                   (o1 not in neighbors[o4] and o2 not in neighbors[o3])
+        return False

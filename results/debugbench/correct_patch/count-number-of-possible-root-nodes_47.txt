@@ -1,0 +1,86 @@
+class Solution {
+public:
+    map<pair<int,int>,int> mp;
+
+    void dfs(vector<vector<int>>& tree, vector<int>& possible, int cur, int ans, int k) {
+        for (auto& a : tree[cur]) {
+            if (a < 0 || a >= tree.size() || possible[a] != -1) {
+                continue;  // Boundary check and proceed only for unvisited nodes
+            }
+
+            int new_ans = ans;
+            bool a1 = false, a2 = false;
+
+            // Correct the conditions
+            if (mp.find({a, cur}) != mp.end() && mp[{a, cur}] == 0) {
+                mp[{a, cur}] = 1;
+                new_ans++;
+                a1 = true;
+            }
+            if (mp.find({cur, a}) != mp.end() && mp[{cur, a}] == 1) {
+                mp[{cur, a}] = 0;
+                new_ans--;
+                a2 = true;
+            }
+
+            possible[a] = (new_ans >= k) ? 2 : 0;  // Simplified condition
+            dfs(tree, possible, a, new_ans, k);
+
+            // Reset the mp changes
+            if (a1) {
+                mp[{a, cur}] = 0;
+            }
+            if (a2) {
+                mp[{cur, a}] = 1;
+            }
+        }
+    }
+
+    int rootCount(vector<vector<int>>& edges, vector<vector<int>>& guesses, int k) {
+        for (auto& e : guesses) {
+            mp[{e[0], e[1]}] = 0;
+        }
+
+        int n = edges.size() + 1;
+        vector<vector<int>> tree(n);
+        for (auto& e : edges) {
+            tree[e[0]].push_back(e[1]);
+            tree[e[1]].push_back(e[0]);
+        }
+
+        queue<int> q;
+        q.push(0);
+        vector<bool> visited(n, false);
+        visited[0] = true;
+        int ans = 0;
+
+        while (!q.empty()) {
+            int a = q.front();
+            q.pop();
+
+            for (int i = 0; i < tree[a].size(); i++) {
+                if (visited[tree[a][i]]) {
+                    continue;
+                }
+
+                visited[tree[a][i]] = true;
+                if (mp.find({a, tree[a][i]}) != mp.end() && mp[{a, tree[a][i]}] == 0) {
+                    mp[{a, tree[a][i]}] = 1;
+                    ans++;
+                }
+                if (mp.find({tree[a][i], a}) != mp.end() && mp[{tree[a][i], a}] == 1) {
+                    mp[{tree[a][i], a}] = 0;
+                    ans--;
+                }
+                q.push(tree[a][i]);
+            }
+        }
+
+        vector<int> possible(n, -1);
+        possible[0] = (ans >= k) ? 2 : 0;  // Correctly handle root node condition
+        dfs(tree, possible, 0, ans, k);
+
+        int sum = count_if(possible.begin(), possible.end(), [](int x) { return x == 2; });  // Sum meaningful root possibilities
+        return sum;
+    }
+};

@@ -1,0 +1,18 @@
+class Solution {
+    public int furthestBuilding(int[] heights, int bricks, int ladders) {
+        PriorityQueue<Integer> p = new PriorityQueue<>();
+        for(int i = 1; i < heights.length; i++) {  // Corrected loop condition
+            int diff = heights[i] - heights[i-1];
+            if(diff > 0) {
+                p.add(diff);
+            }
+            if(p.size() > ladders) {
+                bricks -= p.poll();
+            }
+            if(bricks < 0) {
+                return i - 1;  // Logical index return adjustment considered
+            }
+        }
+        return heights.length - 1;  // No need for extra condition bricks >= 0, simplified return
+    }
+}

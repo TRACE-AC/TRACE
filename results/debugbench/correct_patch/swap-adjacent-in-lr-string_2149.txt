@@ -1,0 +1,39 @@
+class Solution {
+    public boolean canTransform(String start, String end) {
+        Queue<Node> logs = new LinkedList<>();
+
+        int count = 0;
+        for (char c : start.toCharArray()) {
+            if (c == 'X') count++;
+            else {
+                logs.add(new Node(c, count));
+            }
+        }
+
+        count = 0;
+        for (char c : end.toCharArray()) {
+            if (c == 'X') count++;
+            else {
+                if (logs.isEmpty()) return false;
+
+                Node node = logs.poll();
+                if (c != node.c) return false;
+
+                if (c == 'L' && count > node.count) return false; 
+                if (c == 'R' && count < node.count) return false;                
+            }
+        }
+
+        return logs.isEmpty();
+    }
+
+    class Node {
+        public Character c;
+        public int count;
+
+        public Node(Character c, int count) {
+            this.c = c;
+            this.count = count;
+        }
+    }
+}

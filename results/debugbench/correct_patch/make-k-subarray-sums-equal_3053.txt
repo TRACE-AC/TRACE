@@ -1,0 +1,15 @@
+from typing import List
+from math import gcd
+from statistics import median
+
+class Solution:
+    def makeSubKSumEqual(self, A: List[int], K: int) -> int:
+        lA = len(A)
+        g = gcd(lA, K)
+        retV = 0
+        for i in range(g):
+            group = [A[(i + j * g) % lA] for j in range(lA // g)]
+            med = int(median(group))
+            retV += sum(abs(a - med) for a in group)
+            
+        return retV

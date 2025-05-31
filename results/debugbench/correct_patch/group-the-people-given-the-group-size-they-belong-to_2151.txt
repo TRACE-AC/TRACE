@@ -1,0 +1,18 @@
+class Solution {
+    public List<List<Integer>> groupThePeople(int[] groupSizes) {
+        List<List<Integer>> groups = new ArrayList<>();
+        HashMap<Integer, List<Integer>> groupMap = new HashMap<>();
+
+        for(int i = 0; i < groupSizes.length; i++){
+            int size = groupSizes[i];
+            groupMap.putIfAbsent(size, new ArrayList<>());
+            groupMap.get(size).add(i);
+
+            if(groupMap.get(size).size() == size){
+                groups.add(new ArrayList<>(groupMap.get(size)));
+                groupMap.get(size).clear();
+            }
+        }
+        return groups;
+    }
+}

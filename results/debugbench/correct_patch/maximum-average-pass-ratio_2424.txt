@@ -1,0 +1,42 @@
+class Solution {
+    public double maxAverageRatio(int[][] classes, int extraStudents) {
+        PriorityQueue<Class> pq = new PriorityQueue<>(new Compare());
+        for(int[] cl : classes){
+            pq.add(new Class(cl));
+        }
+        while(extraStudents > 0){
+            Class c = pq.remove();
+            c.addExtraStudent();
+            pq.add(c);
+            extraStudents--;
+        }
+        double sum = 0;
+        while(!pq.isEmpty()){
+            Class c = pq.remove();
+            sum += c.pass / c.total;
+        }
+        return sum / classes.length;
+    }
+}
+class Class{
+    double pass;
+    double total;
+    public Class(int[] cl){
+        pass = (double) cl[0];
+        total = (double) cl[1];
+    }
+    public void addExtraStudent(){
+        pass += 1.0;
+        total += 1.0;
+    }
+    public double potentialIncrease() {
+        return (pass + 1.0) / (total + 1.0) - pass / total;
+    }
+}
+class Compare implements Comparator<Class>{
+    public int compare(Class c1, Class c2){
+        double c1Increase = c1.potentialIncrease();
+        double c2Increase = c2.potentialIncrease();
+        return Double.compare(c2Increase, c1Increase);
+    }
+}

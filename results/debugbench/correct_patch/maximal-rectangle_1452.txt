@@ -1,0 +1,89 @@
+import java.util.Stack;
+
+class Pair<T, U> {
+    public final T first;
+    public final U second;
+
+    public Pair(T first, U second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        int n = matrix.length, m = matrix[0].length;
+        int[] nums = new int[m];
+        for (int j = 0; j < m; j++) {
+            nums[j] = matrix[0][j] - '0';
+        }
+        int max = maximumAreaHistogram(nums);
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (matrix[i][j] == '0') {
+                    nums[j] = 0;
+                } else {
+                    nums[j] += (matrix[i][j] - '0');
+                }
+            }
+            max = Math.max(max, maximumAreaHistogram(nums));
+        }
+        return max;
+    }
+    
+    public int maximumAreaHistogram(int[] heights) {
+        Stack<Pair<Integer, Integer>> stack1 = new Stack<>();
+        int[] left = new int[heights.length];
+        int pseudoIndex = -1;
+        for (int i = 0; i < heights.length; i++) {
+            if (stack1.size() == 0) {
+                left[i] = pseudoIndex;
+            } else if (stack1.size() > 0 && stack1.peek().first < heights[i]) {
+                left[i] = stack1.peek().second;
+            } else if (stack1.size() > 0 && stack1.peek().first >= heights[i]) {
+                while (stack1.size() > 0 && stack1.peek().first >= heights[i]) {
+                    stack1.pop();
+                }
+                if (stack1.size() == 0) {
+                    left[i] = pseudoIndex;
+                } else {
+                    left[i] = stack1.peek().second;
+                }
+            }
+            stack1.push(new Pair<>(heights[i], i));
+        }
+        Stack<Pair<Integer, Integer>> stack2 = new Stack<>();
+        int[] right = new int[heights.length];
+        pseudoIndex = heights.length;
+        for (int i = heights.length - 1; i >= 0; i--) {
+            if (stack2.size() == 0) {
+                right[i] = pseudoIndex;
+            } else if (stack2.size() > 0 && stack2.peek().first < heights[i]) {
+                right[i] = stack2.peek().second;
+            } else if (stack2.size() > 0 && stack2.peek().first >= heights[i]) {
+                while (stack2.size() > 0 && stack2.peek().first >= heights[i]) {
+                    stack2.pop();
+                }
+                if (stack2.size() == 0) {
+                    right[i] = pseudoIndex;
+                } else {
+                    right[i] = stack2.peek().second;
+                }
+            }
+            stack2.push(new Pair<>(heights[i], i));
+        }
+
+        int[] width = new int[heights.length];
+        for (int i = 0; i < heights.length; i++) {
+            width[i] = right[i] - left[i] - 1;
+        }
+
+        int[] area = new int[heights.length];
+        int maxArea = 0;
+        for (int i = 0; i < heights.length; i++) {
+            area[i] = heights[i] * width[i];
+            if (area[i] > maxArea) maxArea = area[i];
+        }
+        return maxArea;
+    }
+}

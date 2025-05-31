@@ -1,0 +1,11 @@
+class Solution:
+    def numberOfArithmeticSlices(self, nums: List[int]) -> int:
+        n = len(nums)
+        ans = 0
+        dp = defaultdict(Counter)
+        for i in range(1, n):
+            for j in range(i):
+                d = nums[i] - nums[j]
+                dp[i][d] += dp[j][d] + 1  # Ensuring pair (nums[j], nums[i]) is counted
+                ans += dp[j][d]  # Count each valid subsequence directly without subtracting i
+        return ans

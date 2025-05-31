@@ -1,0 +1,35 @@
+class Solution {
+public:
+
+    int halveArray(vector<int>& nums) 
+    {
+        priority_queue<double>Q;
+
+        double sum=0;
+
+        for(auto ele : nums)
+        {
+            sum+=ele;
+            Q.push(ele);
+            
+        }
+        
+        double half=sum/2;
+
+        int count=0;
+        while(sum>half)
+        { 
+            double max=Q.top();
+            Q.pop();
+
+            max/=2;                 
+            Q.push(max);
+            count++;
+
+            sum-=max;               
+        }
+       
+        return count;
+        
+    }
+};

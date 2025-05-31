@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int solve(int left, int right) {
+        while (left < right) {
+            right &= (right - 1); // Trim the least significant differing bit
+        }
+        return left & right;
+    }
+
+    int rangeBitwiseAnd(int left, int right) {
+        return solve(left, right);
+    }
+};

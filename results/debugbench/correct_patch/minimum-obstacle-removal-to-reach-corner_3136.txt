@@ -1,0 +1,21 @@
+import collections
+
+class Solution:
+    def minimumObstacles(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        distance = [[float('inf') for _ in range(n)] for _ in range(m)]
+        distance[0][0] = 0
+        q = collections.deque([(0, 0, 0)])  # Initialize deque with (distance, i, j)
+        while q:
+            d, i, j = q.popleft()
+            if i == m - 1 and j == n - 1: return d  # When reaching the target cell, return accumulated distance
+            for di, dj in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                ci, cj = i + di, j + dj
+                if 0 <= ci < m and 0 <= cj < n:
+                    new_distance = d + grid[ci][cj]
+                    if new_distance < distance[ci][cj]:
+                        distance[ci][cj] = new_distance
+                        if grid[ci][cj] == 1:
+                            q.append((new_distance, ci, cj))  # Append for obstacles to explore later
+                        else:
+                            q.appendleft((new_distance, ci, cj))  # Prepend to prioritize paths with fewer obstacles

@@ -1,0 +1,11 @@
+class Solution:
+    def findBottomLeftValue(self, root: Optional[TreeNode]) -> int:
+        stack = collections.deque([root])
+        while stack:
+            lvl = []
+            for i in range(len(stack)):
+                n = stack.popleft()
+                lvl.append(n.val)
+                if n.left: stack.append(n.left)
+                if n.right: stack.append(n.right)
+        return lvl[0]

@@ -1,0 +1,50 @@
+class Solution {
+    int ans[];
+    Map<Integer, List<Integer>> map = new HashMap<>();
+    boolean[] vis;
+    
+    public int[] loudAndRich(int[][] richer, int[] quiet) {
+        int n = quiet.length;
+        ans = new int[n];
+        vis = new boolean[n];
+        
+        for (int i = 0; i < richer.length; i++) {
+            map.computeIfAbsent(richer[i][0], k -> new ArrayList<>()).add(richer[i][1]);
+            map.computeIfAbsent(richer[i][1], k -> new ArrayList<>());
+        }
+        
+        PriorityQueue<pair> pq = new PriorityQueue<>(Comparator.comparingInt(p -> p.cost));
+        for (int i = 0; i < n; i++) {
+            ans[i] = -1;
+            pq.add(new pair(i, quiet[i]));
+        }
+        
+        while (!pq.isEmpty()) {
+            pair top = pq.poll();
+            if (!vis[top.node]) {
+                dfs(top.node, top.node);
+            }
+        }
+        return ans;
+    }
+    
+    public void dfs(int node, int origin) {
+        if (ans[node] == -1) {
+            ans[node] = origin;
+        }
+        vis[node] = true;
+        for (int neighbor : map.getOrDefault(node, List.of())) {
+            if (!vis[neighbor]) {
+                dfs(neighbor, origin);
+            }
+        }
+    }
+}
+
+class pair {
+    int node, cost;
+    pair(int node, int cost) {
+        this.node = node;
+        this.cost = cost;
+    }
+}

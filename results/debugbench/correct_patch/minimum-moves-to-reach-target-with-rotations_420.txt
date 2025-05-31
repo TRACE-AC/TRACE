@@ -1,0 +1,55 @@
+class Solution {
+    int n;
+    vector<vector<int>> hmemo, vmemo;
+    vector<vector<int>> *gridp;
+
+    int dfs(bool h, int r, int c) {
+        vector<vector<int>> & grid = *gridp;
+        if (h && r == n-1 && c == n-2)
+            return 0;
+        int res = INT_MAX-1;
+        if (h) {
+            if (hmemo[r][c] > 0) {
+                return hmemo[r][c];
+            }
+            hmemo[r][c] = INT_MAX-1;
+            // Ensure the grid cells are empty to allow movement
+            if (c+2 < n && grid[r][c+2] == 0) {
+                res = min(res, 1 + dfs(true, r, c + 1));
+            }
+            // Check if cells beneath are clear for a move or rotation
+            if (r+1 < n && grid[r+1][c] == 0 && grid[r+1][c+1] == 0) {
+                res = min(res, 1 + dfs(true, r + 1, c));
+                res = min(res, 1 + dfs(false, r, c));
+            }
+            hmemo[r][c] = res;
+            return res;
+        } else {
+            if (vmemo[r][c] > 0) {
+                return vmemo[r][c];
+            }
+            vmemo[r][c] = INT_MAX-1;
+            // Ensure the grid cells below are empty to allow movement
+            if (r+2 < n && grid[r+2][c] == 0) {
+                res = min(res, 1 + dfs(false, r + 1, c));
+            }
+            // Check if cells to the right are clear for a rotation
+            if (c+1 < n && grid[r][c+1] == 0 && grid[r+1][c+1] == 0) {
+                res = min(res, 1 + dfs(false, r, c + 1));
+                res = min(res, 1 + dfs(true, r, c));
+            }
+            vmemo[r][c] = res;
+            return res;
+        }
+    }
+
+public:
+    int minimumMoves(vector<vector<int>>& grid) {
+        this->gridp = &grid;
+        n = grid.size();
+        hmemo = vector<vector<int>>(n, vector<int>(n, -1));
+        vmemo = vector<vector<int>>(n, vector<int>(n, -1));
+        int res = dfs(true, 0, 0);
+        return res < INT_MAX-1 ? res : -1;
+    }
+};

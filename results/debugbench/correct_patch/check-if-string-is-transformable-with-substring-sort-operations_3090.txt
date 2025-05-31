@@ -1,0 +1,17 @@
+class Solution:
+  def isTransformable(self, s: str, t: str) -> bool:
+    idx = defaultdict(deque)
+    for i, c in enumerate(s):
+      idx[int(c)].append(i)
+    for c in t:
+      d = int(c)
+      if not idx[d]:
+        return False
+      # Remove the constraint checking for larger digits since it's redundant
+      current_index = idx[d].popleft()
+      # Re-evaluate valid permutations for digits that can appear before current_index
+      # by using comprehensive checks for each digit before sorting
+      for j in range(d):
+        if idx[j] and idx[j][0] < current_index:
+          return False
+    return True

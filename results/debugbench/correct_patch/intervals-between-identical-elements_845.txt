@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<long long> getDistances(vector<int>& arr) {
+        int n = arr.size();
+        vector<long long> ans(n);
+        unordered_map<long long, long long> sumFromLeft, sumFromRight, countFromLeft, countFromRight;
+
+        // Initialize maps for right parts
+        for (int i = 0; i < n; ++i) {
+            sumFromRight[arr[i]] += i;
+            countFromRight[arr[i]]++;
+        }
+
+        for (int i = 0; i < n; ++i) {
+            countFromLeft[arr[i]]++;
+            sumFromLeft[arr[i]] += i;
+
+            long long intervalsLeft = countFromLeft[arr[i]] * i - sumFromLeft[arr[i]]; // Sum of absolute differences to the left
+            long long intervalsRight = sumFromRight[arr[i]] - countFromRight[arr[i]] * i; // Sum of absolute differences to the right
+
+            ans[i] = intervalsLeft + intervalsRight;
+
+            // Decrement maps for right parts after computing answer
+            countFromRight[arr[i]]--;
+            sumFromRight[arr[i]] -= i;
+        }
+        
+        return ans;
+    }
+};

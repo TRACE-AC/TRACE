@@ -1,0 +1,18 @@
+class Solution {
+public:
+    long long appealSum(string s) {
+        long long int x = 0, y = 0;
+        vector<int> v(26, -1);
+
+        for(int i = 0; i < s.length(); i++){
+            if(v[s[i] - 'a'] != -1){
+                x -= v[s[i] - 'a'];
+            }
+            
+            v[s[i] - 'a'] = i + 1;  // Update the last occurrence index
+            x += i + 1;
+            y += x;
+        }
+        return y;
+    }
+};

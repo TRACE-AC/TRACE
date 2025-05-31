@@ -1,0 +1,16 @@
+class Solution {
+public:
+int ans=0;
+
+    int maxSumDivThree(vector<int>& nums) {
+        vector<int> dp(3);
+        for(auto a: nums){
+            vector<int> dpNew(dp);
+            for(int i : dp){
+                dpNew[(i + a) % 3] = max(dpNew[(i + a) % 3], i + a);
+            }
+            dp = dpNew;
+        }
+        return dp[0];
+    }
+};

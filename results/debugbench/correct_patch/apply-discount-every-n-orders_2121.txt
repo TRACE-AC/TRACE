@@ -1,0 +1,26 @@
+class Cashier {
+    HashMap<Integer,Integer> stock = new HashMap<>();
+    int n;
+    int discount;
+    int itr = 0;
+    
+    public Cashier(int n, int discount, int[] products, int[] prices) {
+        for (int i = 0; i < products.length; i++) {
+            stock.put(products[i], prices[i]);
+        }
+        this.n = n;
+        this.discount = discount;
+    }
+    
+    public double getBill(int[] product, int[] amount) {
+        double total = 0;
+        for (int i = 0; i < product.length; i++) {
+            total += (double)(amount[i] * stock.get(product[i]));
+        }
+        itr++;
+        if (itr % n == 0) {
+            total *= (double)(((100 - discount) / 100.0));
+        }
+        return total;
+    }
+}

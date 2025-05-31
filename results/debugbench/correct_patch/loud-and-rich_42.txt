@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<int>dp;
+    int dfs(int node, vector<vector<int>>&adj, vector<int>& quiet){
+        if(dp[node]!=-1) return dp[node];
+
+        int miniVal  = quiet[node]; 
+        int miniNode = node;
+
+        for(auto it:adj[node]){
+            int miniIndex = dfs(it,adj,quiet);
+            if(quiet[miniIndex] < miniVal){
+                miniVal = quiet[miniIndex];
+                miniNode = miniIndex; // Correct assignment
+
+            }
+
+        }
+
+        return dp[node] = miniNode;        
+    }
+    vector<int> loudAndRich(vector<vector<int>>& richer, vector<int>& quiet) {
+        int n = quiet.size();
+        dp.resize(n,-1);
+        vector<vector<int>>adj(n);
+        vector<int>ans;
+        for(auto it: richer){
+            adj[it[1]].push_back(it[0]);
+        }
+
+        for(int i =0;i<n;i++){
+            int res = dfs(i,adj,quiet);
+            ans.push_back(res);
+        }
+        return ans;
+    }
+};

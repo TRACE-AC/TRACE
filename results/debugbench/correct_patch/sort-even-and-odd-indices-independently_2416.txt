@@ -1,0 +1,34 @@
+class Solution {
+    public int[] sortEvenOdd(int[] nums) {
+        // Separate priority queues for even and odd indices
+        PriorityQueue<Integer> evenQueue = new PriorityQueue<>();
+        PriorityQueue<Integer> oddQueue = new PriorityQueue<>(new MaxHeap());
+
+        // Separate even and odd indices into respective queues
+        for (int i = 0; i < nums.length; i++) {
+            if (i % 2 == 0) {
+                evenQueue.add(nums[i]);
+            } else {
+                oddQueue.add(nums[i]);
+            }
+        }
+
+        // Assign back the sorted even indices
+        for (int i = 0; i < nums.length; i += 2) {
+            nums[i] = evenQueue.poll();
+        }
+
+        // Assign back the sorted odd indices
+        for (int i = 1; i < nums.length; i += 2) {
+            nums[i] = oddQueue.poll();
+        }
+
+        return nums;
+    }
+}
+
+class MaxHeap implements Comparator<Integer> {
+    public int compare(Integer ca, Integer cb) {
+        return cb - ca;
+    }
+}

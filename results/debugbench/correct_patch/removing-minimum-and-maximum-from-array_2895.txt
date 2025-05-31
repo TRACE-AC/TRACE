@@ -1,0 +1,15 @@
+class Solution:
+    def minimumDeletions(self, nums: List[int]) -> int:
+        min_pos = nums.index(min(nums))
+        max_pos = nums.index(max(nums))
+
+        # If the positions are swapped, swap them back
+        if min_pos > max_pos:
+            min_pos, max_pos = max_pos, min_pos
+
+        # Calculate deletions by three methods and return the minimum
+        from_front = max_pos + 1
+        from_back = len(nums) - min_pos
+        from_both_ends = min_pos + 1 + len(nums) - max_pos
+
+        return min(from_front, from_back, from_both_ends)

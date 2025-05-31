@@ -1,0 +1,28 @@
+class Solution:
+    def maxNiceDivisors(self, primeFactors: int) -> int:
+        if primeFactors <= 3:
+            return primeFactors
+        
+        MOD = int(1e9 + 7)
+        
+        def calculateNiceDivisors(base: int, power: int) -> int:
+            if power == 0:
+                return 1
+
+            result = calculateNiceDivisors(base, power // 2)
+            result = (result * result) % MOD
+
+            if power % 2 == 1:
+                result = (result * base) % MOD
+
+            return result
+
+        if primeFactors % 3 == 0:
+            power = primeFactors // 3
+            return calculateNiceDivisors(3, power)
+        elif primeFactors % 3 == 1:
+            power = (primeFactors // 3) - 1
+            return (calculateNiceDivisors(3, power) * 4) % MOD
+        else:
+            power = primeFactors // 3
+            return (calculateNiceDivisors(3, power) * 2) % MOD

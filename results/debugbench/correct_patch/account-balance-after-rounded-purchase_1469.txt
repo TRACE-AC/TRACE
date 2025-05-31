@@ -1,0 +1,14 @@
+class Solution {
+    public int accountBalanceAfterPurchase(int amt) {
+        int roundedAmount;
+        int remainder = amt % 10;
+        if (remainder == 0) {
+            roundedAmount = amt;
+        } else if (remainder >= 5) {
+            roundedAmount = amt + (10 - remainder);
+        } else {
+            roundedAmount = amt - remainder;
+        }
+        return 100 - roundedAmount;
+    }
+}

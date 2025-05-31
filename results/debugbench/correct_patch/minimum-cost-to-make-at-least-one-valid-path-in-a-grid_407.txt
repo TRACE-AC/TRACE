@@ -1,0 +1,74 @@
+#define pii pair<int, int>
+#define maxn 10005
+#define inf 1000000000
+
+class Solution {
+public:
+    vector<pii>g[maxn];
+    int dis[maxn];
+    int n, m;
+    bool valid(int x, int y) {
+        if(x >= 0 and x < n and y >= 0 and y < m) return true;
+        else return false;
+    }
+    void bfs(int s) {
+        deque<int> q;
+        for(int i=0; i<maxn; i++) dis[i] = inf;
+        dis[s] = 0;
+        q.push_front(s);
+        while(!q.empty()){
+            int u = q.front();
+            q.pop_front();
+            for(int i=0; i<g[u].size(); i++){
+                int v = g[u][i].first;
+                int w = g[u][i].second;
+                if(dis[u] + w < dis[v]){
+                    dis[v] = dis[u] + w;
+                    if(w == 1) q.push_back(v);
+                    else q.push_front(v);
+                }
+            }
+        }
+    }
+    int minCost(vector<vector<int>>& grid) {
+        n = grid.size();
+        m = grid[0].size();
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<m; j++) {
+                int u = i * m + j;
+                if(valid(i+1, j)) {
+                    int v = (i+1) * m + j;
+                    int w;
+                    if(grid[i][j] == 3) w = 0;
+                    else w = 1;
+                    g[u].push_back({v, w});
+                }
+                if(valid(i-1, j)) {
+                    int v = (i-1) * m + j;
+                    int w;
+                    if(grid[i][j] == 4) w = 0;
+                    else w = 1;
+                    g[u].push_back({v, w});
+                } 
+                if(valid(i, j+1)) {
+                    int v = i * m + (j+1);
+                    int w;
+                    if(grid[i][j] == 1) w = 0;
+                    else w = 1;
+                    g[u].push_back({v, w});
+                } 
+                if(valid(i, j-1)) {
+                    int v = i * m + (j-1);
+                    int w;
+                    if(grid[i][j] == 2) w = 0;
+                    else w = 1;
+                    g[u].push_back({v, w});
+                } 
+            }
+        }
+        bfs(0);
+        int node = (n * m) - 1;
+        int ans = dis[node];
+        return ans;
+    }
+};

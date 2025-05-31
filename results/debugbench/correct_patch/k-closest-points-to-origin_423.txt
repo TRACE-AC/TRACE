@@ -1,0 +1,46 @@
+class Solution {
+    class info {
+    public:
+        int x;
+        int y;
+        float distance;
+        info(int a, int b)
+        {
+            x = a;
+            y = b;
+            distance = sqrt(x * x + y * y);
+        }
+    };
+    class compare {
+    public:
+        bool operator()(const info& point1, const info& point2)
+        {
+            return point1.distance > point2.distance;
+        }
+    };
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        priority_queue<info, vector<info>, compare> minheap;
+        for (int i = 0; i < points.size(); i++)
+        {
+            int x1 = points[i][0];
+            int y1 = points[i][1];
+            info newinfo(x1, y1);
+            minheap.push(newinfo);
+        }
+        vector<vector<int>> ans;
+        while (k > 0)
+        {
+            info temp = minheap.top();
+            minheap.pop();
+            int xval = temp.x;
+            int yval = temp.y;
+            vector<int> temp2;
+            temp2.push_back(xval);
+            temp2.push_back(yval);
+            ans.push_back(temp2);
+            k--;
+        }
+        return ans;
+    }
+};

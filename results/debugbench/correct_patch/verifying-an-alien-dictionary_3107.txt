@@ -1,0 +1,30 @@
+class Solution:
+    def isAlienSorted(self, words: List[str], order: str) -> bool:
+        mapper = {chr(i):-1 for i in range(97,97+26)}
+        
+        # Map each character to its rank according to the given alien order
+        for i in range(len(order)):
+            mapper[order[i]] = i
+        
+        def helper() -> bool:
+            for i in range(len(words)-1):
+                # Compare two consecutive words
+                first_word = words[i]
+                second_word = words[i+1]
+                min_length = min(len(first_word), len(second_word))
+
+                # Find the first place where the words differ, or reach the end of one
+                for j in range(min_length):
+                    if first_word[j] != second_word[j]:
+                        if mapper[first_word[j]] > mapper[second_word[j]]:
+                            return False
+                        break
+                else:
+                    # If all characters are the same for the length of the shorter word
+                    # Ensure the longer word comes after the shorter to be lexicographically sorted
+                    if len(first_word) > len(second_word):
+                        return False
+            
+            return True
+
+        return helper()

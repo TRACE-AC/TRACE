@@ -1,0 +1,38 @@
+class Solution {
+public:
+   
+    void dfs(int i, int ansc, vector<vector<int>>& ans, vector<int>& vis, vector<vector<int>>& res){
+        
+        vis[i] = 1;
+        
+        for (auto t : ans[i]) {
+            if (!vis[t]) {
+                dfs(t, ansc, ans, vis, res);
+            }
+        }
+       
+        if (i != ansc) {
+            res[i].push_back(ansc);
+        }
+    }
+    
+    vector<vector<int>> getAncestors(int n, vector<vector<int>>& edges) {
+        
+        vector<vector<int>> ans(n), result(n);
+        
+        for (auto a : edges) {
+            ans[a[0]].push_back(a[1]);
+        }
+
+        for (int i = 0; i < n; i++) {
+            vector<int> visited(n, 0);  // Reset visited vector for each node
+            dfs(i, i, ans, visited, result);
+        }
+
+        for (auto &ancestors : result) {
+            sort(ancestors.begin(), ancestors.end());  // Sort ancestors in ascending order
+        }
+      
+        return result;
+    }
+};

@@ -1,0 +1,8 @@
+engine_config:
+  model: # your basic LLM
+  max_try: # max repair attempts
+test_config:
+  time_out: # timeout limit
+cookie_config:
+  - leetcode_session: # your LEETCODE_SESSION
+    csrf_token: # your csrf_token

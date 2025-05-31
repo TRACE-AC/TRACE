@@ -1,0 +1,42 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+class Solution {
+    public int[] relativeSortArray(int[] arr1, int[] arr2) {
+        // Step 1: Create a map to count occurrences in arr1
+        Map<Integer, Integer> countMap = new HashMap<>();
+        for (int num : arr1) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+        }
+
+        // Step 2: Prepare answer list using arr2's order
+        List<Integer> ansList = new ArrayList<>();
+        for (int num : arr2) {
+            int count = countMap.get(num);
+            for (int i = 0; i < count; i++) {
+                ansList.add(num);
+            }
+            countMap.remove(num);
+        }
+
+        // Step 3: Add remaining elements in sorted order
+        List<Integer> remainingList = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
+            int num = entry.getKey();
+            int count = entry.getValue();
+            for (int i = 0; i < count; i++) {
+                remainingList.add(num);
+            }
+        }
+        // Sort and add remaining elements to the answer list
+        remainingList.sort(null);
+        ansList.addAll(remainingList);
+
+        // Convert answer list to array
+        int[] ans = ansList.stream().mapToInt(Integer::intValue).toArray();
+        return ans;
+    }
+}

@@ -1,0 +1,9 @@
+class Solution:
+    def findKthBit(self, N, K):
+        # Generate Sn iteratively to avoid deep recursion
+        Sn = "0"
+        for i in range(2, N + 1):
+            inverted = ''.join('1' if bit == '0' else '0' for bit in Sn)
+            Sn = Sn + "1" + inverted[::-1]
+        
+        return Sn[K - 1]

@@ -1,0 +1,44 @@
+class Solution {
+public:
+    void fliprow(int r, vector<vector<int>>& grid) {
+        for(int i = 0; i < grid[0].size(); i++) {
+            grid[r][i] = 1 - grid[r][i];
+        }
+    }
+
+    void flipcol(int c, vector<vector<int>>& grid) {
+        for(int j = 0; j < grid.size(); j++) {
+            grid[j][c] = 1 - grid[j][c];
+        }
+    }
+
+    int matrixScore(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        for(int i = 0; i < n; i++) {
+            if(grid[i][0] == 0) {    
+                fliprow(i, grid);
+            }
+        }
+        for(int j = 1; j < m; j++) { // start from 1 to ensure 0s are maximized in the first position
+            int cnt0 = 0;
+            int cnt1 = 0;
+            for(int i = 0; i < n; i++) {
+                if(grid[i][j] == 0) cnt0++;
+                else cnt1++;
+            }
+            if(cnt0 > cnt1) { // flip column if more 0s than 1s
+                flipcol(j, grid);
+            }
+        }
+        int sum = 0;
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(grid[i][j] == 1) {
+                    sum += (1 << (m - j - 1));
+                }
+            }
+        }
+        return sum;
+    }
+};

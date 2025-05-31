@@ -1,0 +1,50 @@
+class Solution {
+private:
+    bool helper(vector<vector<int>>& grid, int row, int col, int num) {
+        int n = grid.size();
+        if(num == n*n) return true;
+        int i, j;
+
+        i = row - 2;
+        j = col + 1;
+        if(i >= 0 && j < n && grid[i][j] == num) return helper(grid, i, j, num + 1);
+
+        i = row - 2;
+        j = col - 1;
+        if(i >= 0 && j >= 0 && grid[i][j] == num) return helper(grid, i, j, num + 1);
+
+        i = row + 2;
+        j = col - 1;
+        if(i < n && j >= 0 && grid[i][j] == num) return helper(grid, i, j, num + 1);
+
+        i = row + 2;
+        j = col + 1;
+        if(i < n && j < n && grid[i][j] == num) return helper(grid, i, j, num + 1);
+
+        i = row + 1;
+        j = col + 2;
+        if(i < n && j < n && grid[i][j] == num) return helper(grid, i, j, num + 1);
+
+        i = row - 1;
+        j = col + 2;
+        if(i >= 0 && j < n && grid[i][j] == num) return helper(grid, i, j, num + 1);
+
+        i = row - 1;
+        j = col - 2;
+        if(i >= 0 && j >= 0 && grid[i][j] == num) return helper(grid, i, j, num + 1);
+
+        i = row + 1;
+        j = col - 2;
+        if(i < n && j >= 0 && grid[i][j] == num) return helper(grid, i, j, num + 1);
+
+        return false;
+    }
+public:
+    bool checkValidGrid(vector<vector<int>>& grid) {
+        ios::sync_with_stdio(false);
+        cin.tie(0);
+        cout.tie(0);
+        if(grid[0][0] != 0) return false;
+        return helper(grid, 0, 0, 1);
+    }
+};

@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int helper(vector<int>&costs, vector<int>&days, int ind, vector<int>&dp) {
+        if(ind < 0) return 0;
+        if(dp[days[ind]] != -1) return dp[days[ind]];
+        
+        int daypoint = costs[0] + helper(costs, days, ind - 1, dp);
+        
+        int indweek = ind > 0 ? upper_bound(days.begin(), days.end(), days[ind] - 7) - days.begin() : 0;
+        indweek = max(indweek - 1, -1); // Ensure index is non-negative
+        
+        int weekpoint = costs[1] + helper(costs, days, indweek, dp);
+        
+        int indmonth = ind > 0 ? upper_bound(days.begin(), days.end(), days[ind] - 30) - days.begin() : 0;
+        indmonth = max(indmonth - 1, -1); // Ensure index is non-negative
+        
+        int monthpoint = costs[2] + helper(costs, days, indmonth, dp);
+        
+        return dp[days[ind]] = min({daypoint, weekpoint, monthpoint});
+    }
+
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        int n = days.size();
+        vector<int> dp(366, -1);
+        return helper(costs, days, n - 1, dp);
+    }
+};

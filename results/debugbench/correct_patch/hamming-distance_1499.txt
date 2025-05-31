@@ -1,0 +1,25 @@
+class Solution {
+    public int hammingDistance(int x, int y) {
+        String x_bin = Integer.toBinaryString(x);
+        String y_bin = Integer.toBinaryString(y);
+
+        int max_len = Math.max(x_bin.length(), y_bin.length());
+        StringBuilder x_bin_padded = new StringBuilder(x_bin);
+        StringBuilder y_bin_padded = new StringBuilder(y_bin);
+
+        while (x_bin_padded.length() < max_len) {
+            x_bin_padded.insert(0, "0");
+        }
+        while (y_bin_padded.length() < max_len) {
+            y_bin_padded.insert(0, "0");
+        }
+
+        int result = 0;
+        for (int i = 0; i < max_len; i++) {
+            if (x_bin_padded.charAt(i) != y_bin_padded.charAt(i)) {
+                result++;
+            }
+        }
+        return result;
+    }
+}

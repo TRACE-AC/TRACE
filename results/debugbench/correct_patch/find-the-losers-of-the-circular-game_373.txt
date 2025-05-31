@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> circularGameLosers(int n, int k) {
+        vector<int> frq(n, 0); // Correct size for friends numbered 0 to n-1
+        vector<int> ans;
+        int i = 0; // Start indexing from 0
+        int round = 1;
+        
+        while(true) {
+            frq[i]++;
+            if(frq[i] >= 2) break;
+            i = (i + (round++ * k)) % n; // Correct modulo operation for circular access
+        }
+        
+        for(int j = 0; j < n; j++) // Correct loop condition
+            if(frq[j] == 0) ans.push_back(j + 1); // Correctly add numbered friend
+        
+        return ans;
+    }
+};

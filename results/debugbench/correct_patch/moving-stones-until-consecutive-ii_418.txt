@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<int> numMovesStonesII(vector<int>& stones) {
+        if (stones.size() < 3) return {0, 0}; // Insert range checker
+
+        sort(stones.begin(), stones.end()); // Ensure stones are sorted
+
+        int N = stones.size(), low = N;
+        for (int i = 0, j = 0; j < N; ++j) {
+            while (stones[j] - stones[i] + 1 > N) {
+                ++i;
+            }
+            int current_window = j - i + 1;
+            if (N - current_window == 1 && stones[j] - stones[i] + 1 == N - 1) {
+                low = min(low, 2);
+            } else {
+                low = min(low, N - current_window);
+            }
+        }
+
+        int high = max((stones[N - 1] - stones[1] + 1) - N,
+                       (stones[N - 2] - stones[0] + 1) - N);
+        high += 1; // Adjust for the single move to calculate the maximum
+
+        return {low, high};
+    }
+};

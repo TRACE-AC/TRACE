@@ -1,0 +1,46 @@
+class Solution {
+    public int[] smallestRange(List<List<Integer>> nums) {
+        int k = nums.size();
+        List<Pair<Integer,Integer>> list = new ArrayList<>();
+        for(int i = 0; i < k; i++){
+            List<Integer> l = nums.get(i);
+            for(int nu : l){
+                list.add(new Pair<Integer, Integer>(nu, i));
+            }
+        }
+        
+        Collections.sort(list, (a, b) -> a.getKey() - b.getKey());
+        
+        int[] ans = {list.get(0).getKey(), list.get(list.size() - 1).getKey()};
+        int i = 0, j = 0;
+        List<Integer> store = new ArrayList<>();
+        HashMap<Integer, Integer> mp = new HashMap<>();
+        
+        while (j < list.size()) {
+            int nu = list.get(j).getKey();
+            int type = list.get(j).getValue();
+            store.add(nu);
+
+            mp.put(type, mp.getOrDefault(type, 0) + 1);
+
+            while (mp.size() == k) {
+                int dif = store.get(store.size() - 1) - store.get(0);
+                if(dif < ans[1] - ans[0]){
+                    ans[0] = store.get(0);
+                    ans[1] = store.get(store.size() - 1);
+                }
+                int t = list.get(i).getValue();
+                mp.put(t, mp.get(t) - 1);
+                if (mp.get(t) == 0) {
+                    mp.remove(t);
+                }
+                store.remove(0);
+                i++;
+            }
+
+            j++;
+        }
+        
+        return ans;
+    }
+}

@@ -1,0 +1,27 @@
+#include <string>
+#include <algorithm>
+
+class Solution {
+public:
+    std::string gcdOfStrings(std::string str1, std::string str2) {
+        if (str1 + str2 == str2 + str1) {
+            int gcdLength = std::__gcd(str1.length(), str2.length());
+            std::string potentialGCD = str1.substr(0, gcdLength);
+
+            std::string repeatedStr1;
+            std::string repeatedStr2;
+            for (int i = 0; i < str1.length() / gcdLength; ++i) {
+                repeatedStr1 += potentialGCD;
+            }
+
+            for (int i = 0; i < str2.length() / gcdLength; ++i) {
+                repeatedStr2 += potentialGCD;
+            }
+
+            if (repeatedStr1 == str1 && repeatedStr2 == str2) {
+                return potentialGCD;
+            }
+        }
+        return "";
+    }
+};

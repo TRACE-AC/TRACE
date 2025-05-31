@@ -1,0 +1,22 @@
+class Solution {
+    public boolean isReachable(int targetX, int targetY) {
+        // Base cases for terminating recursion
+        if (targetX == 1 && targetY == 1)
+            return true;
+        if (targetX == 0 || targetY == 0)
+            return false;
+        
+        // Swap to ensure targetX is always less than or equal to targetY
+        if (targetX > targetY) 
+            return isReachable(targetY, targetX);
+        
+        // If either targetX or targetY is even, we can potentially reduce it
+        if (targetX % 2 == 0)
+            return isReachable(targetX / 2, targetY);
+        if (targetY % 2 == 0)
+            return isReachable(targetX, targetY / 2);
+        
+        // When both are odd, attempt to reduce with subtraction
+        return isReachable(targetX, targetY - targetX);
+    }
+}

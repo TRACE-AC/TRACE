@@ -1,0 +1,57 @@
+class Solution:
+    def minimumTotalPrice(self, n: int, edges: List[List[int]], price: List[int], trips: List[List[int]]) -> int:
+        g = [[] for _ in range(n)]
+        for i, j in edges:
+            g[i].append(j)
+            g[j].append(i)
+
+        freq = [0] * n
+        level = [0] * n
+        parent = [-1] * n
+        
+        # Set a limit on indices to prevent out-of-range errors, doing range check
+        def dfs(i, l, p):
+            if 0 <= i < n:
+                level[i] = l
+                parent[i] = p
+                for j in g[i]:
+                    if j != p:
+                        dfs(j, l + 1, i)
+
+        def LCA(a, b):
+            if level[a] > level[b]:
+                a, b = b, a
+            d = level[b] - level[a]
+            while d:
+                b = parent[b]
+                d -= 1
+            if a == b:
+                return a
+            while a != b:
+                a = parent[a]
+                b = parent[b]
+            return a
+
+        dfs(0, 0, -1)
+        for i, j in trips:
+            lca = LCA(i, j)
+            # Correct frequency calculation by tracing paths
+            while i != lca:
+                freq[i] += 1
+                i = parent[i]
+            freq[i] += 1
+            while j != lca:
+                freq[j] += 1
+                j = parent[j]
+
+        def dp(i, p):
+            res0 = freq[i] * price[i]  # cost without halving
+            res1 = freq[i] * (price[i] // 2)  # cost with halving
+            for j in g[i]:
+                if j != p:
+                    curr0, curr1 = dp(j, i)
+                    res0 += min(curr0, curr1)  # Take the minimum of adjacent nodes
+                    res1 += curr0
+            return res0, res1
+
+        return min(dp(0, -1))

@@ -1,0 +1,8 @@
+from collections import Counter
+from typing import List
+
+class Solution:
+    def uniqueOccurrences(self, arr: List[int]) -> bool:
+        d = Counter(arr)
+        occurrence_counts = list(d.values())
+        return len(occurrence_counts) == len(set(occurrence_counts))

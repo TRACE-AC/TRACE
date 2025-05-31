@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int minCost(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<int> dp(n, INT_MAX);
+
+        // Proper initialization of the dp for the first element
+        unordered_map<int, int> freq;
+        int val = 0;
+        for (int j = 0; j < n; j++) {
+            freq[nums[j]]++;
+            if (freq[nums[j]] == 2) val += 2;
+            else if (freq[nums[j]] > 2) val++;
+            dp[j] = k + val;
+        }
+
+        // Dynamic programming transition
+        for (int i = 1; i < n; i++) {
+            val = 0;
+            freq.clear();
+            for (int j = i; j >= 0; j--) {
+                freq[nums[j]]++;
+                if (freq[nums[j]] == 2) val += 2;
+                else if (freq[nums[j]] > 2) val++;
+                dp[i] = min(dp[i], (j > 0 ? dp[j - 1] : 0) + k + val);
+            }
+        }
+        return dp[n-1];
+    }
+};

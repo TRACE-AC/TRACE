@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int minOperations(string s) {
+        int n = s.size(), oddPatternMismatch = 0, evenPatternMismatch = 0;
+        for(int i = 0; i < n; i++) {
+            // Check mismatches for "0101..." pattern
+            if(s[i]-'0' != i%2) {
+                oddPatternMismatch++;
+            }
+            // Check mismatches for "1010..." pattern
+            if(s[i]-'0' == i%2) {
+                evenPatternMismatch++;
+            }
+        }
+        return min(oddPatternMismatch, evenPatternMismatch);
+    }
+};

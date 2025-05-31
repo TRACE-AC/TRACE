@@ -1,0 +1,18 @@
+class Solution:
+    def validPartition(self, nums: List[int]) -> bool:
+        if len(nums) < 2:
+            return False
+
+        checks = [True] + [False] * (len(nums))
+
+        for i in range(2, len(nums) + 1):
+            if nums[i - 1] == nums[i - 2]:
+                checks[i] = checks[i] or checks[i - 2]
+
+            if i >= 3 and nums[i - 1] == nums[i - 2] == nums[i - 3]:
+                checks[i] = checks[i] or checks[i - 3]
+
+            if i >= 3 and nums[i - 1] == nums[i - 2] + 1 == nums[i - 3] + 2:
+                checks[i] = checks[i] or checks[i - 3]
+
+        return checks[len(nums)]

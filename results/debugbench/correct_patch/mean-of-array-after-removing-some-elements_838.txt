@@ -1,0 +1,14 @@
+class Solution {
+public:
+    double trimMean(vector<int>& arr) {
+        int k;
+        double mean;
+        sort(arr.begin(), arr.end());
+        k = 0.05 * arr.size();
+        
+        vector<int> trimmedArr(arr.begin() + k, arr.end() - k);
+        mean = accumulate(trimmedArr.begin(), trimmedArr.end(), 0.0) / trimmedArr.size();
+        
+        return mean;
+    }
+};

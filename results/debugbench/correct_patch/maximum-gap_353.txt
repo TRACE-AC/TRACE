@@ -1,0 +1,46 @@
+class Solution {
+public:
+int maximumGap(vector<int>& nums) {
+    int n = nums.size();
+    if (n < 2)
+        return 0;
+
+    // Find the minimum and maximum elements
+    int min_val = *min_element(nums.begin(), nums.end());
+    int max_val = *max_element(nums.begin(), nums.end());
+    
+    // Base case: if the min and max are the same, max gap is zero
+    if (min_val == max_val)
+        return 0;
+
+    // Determine bucket size and count
+    int bucket_size = max(1, (max_val - min_val) / (n - 1)); // At least one to avoid dividing by zero
+    int bucket_count = (max_val - min_val) / bucket_size + 1;
+
+    // Create buckets to hold min and max values
+    vector<pair<int, int>> buckets(bucket_count, {-1, -1});
+
+    // Place numbers into buckets
+    for (int num : nums) {
+        int bucket_idx = (num - min_val) / bucket_size;
+        if (buckets[bucket_idx].first == -1) {
+            buckets[bucket_idx].first = buckets[bucket_idx].second = num;
+        } else {
+            buckets[bucket_idx].first = min(buckets[bucket_idx].first, num);
+            buckets[bucket_idx].second = max(buckets[bucket_idx].second, num);
+        }
+    }
+
+    // Calculate max gap
+    int maxgap = 0;
+    int previous_max = min_val;
+
+    for (const auto& bucket : buckets) {
+        if (bucket.first == -1) continue;  // Empty bucket
+        maxgap = max(maxgap, bucket.first - previous_max);
+        previous_max = bucket.second;
+    }
+    
+    return maxgap;
+}
+};

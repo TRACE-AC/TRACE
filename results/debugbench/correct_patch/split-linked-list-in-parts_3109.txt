@@ -1,0 +1,29 @@
+class Solution:
+    def splitListToParts(self, head: Optional[ListNode], k: int) -> List[Optional[ListNode]]:
+        l = []
+        length = 0
+        ptr = head
+        while ptr:
+            length += 1
+            ptr = ptr.next
+
+        part_size = length // k
+        extra_parts = length % k
+
+        current = head
+        for i in range(k):
+            head_of_part = current
+            part_length = part_size + (1 if i < extra_parts else 0)
+            for j in range(part_length - 1):
+                if current:
+                    current = current.next
+            if current:
+                temp = current.next
+                current.next = None
+                current = temp
+            l.append(head_of_part)
+        
+        for i in range(len(l), k):
+            l.append(None)
+        
+        return l

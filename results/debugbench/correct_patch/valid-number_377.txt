@@ -1,0 +1,53 @@
+class Solution {
+public:
+    bool isNumber(string s) {
+        int n = s.length();
+        int i = 0;
+
+        while (i < n && isspace(s[i])) {
+            i++;
+        }
+
+        if (i < n && (s[i] == '+' || s[i] == '-')) {
+            i++;
+        }
+
+        bool hasDigits = false;
+        while (i < n && isdigit(s[i])) {
+            i++;
+            hasDigits = true;
+        }
+
+        if (i < n && s[i] == '.') {
+            i++;
+            while (i < n && isdigit(s[i])) {
+                i++;
+                hasDigits = true;
+            }
+        }
+
+        if (hasDigits && i < n && (s[i] == 'e' || s[i] == 'E')) {
+            i++;
+
+            if (i < n && (s[i] == '+' || s[i] == '-')) {
+                i++;
+            }
+
+            bool hasExponentDigits = false;
+            while (i < n && isdigit(s[i])) {
+                i++;
+                hasExponentDigits = true;
+            }
+
+            if (!hasExponentDigits) {
+                return false;
+            }
+        }
+
+        while (i < n && isspace(s[i])) {
+            i++;
+        }
+
+        return i == n && hasDigits;
+    }
+};

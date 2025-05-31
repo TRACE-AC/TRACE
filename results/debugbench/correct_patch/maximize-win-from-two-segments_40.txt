@@ -1,0 +1,36 @@
+class Solution 
+{
+public:
+    int maximizeWin(vector<int>& a, int k) 
+    {
+        int n = a.size();
+        vector<int> dp(n, 0);
+        vector<int> max_suffix(n, 0);
+
+        // Initial calculation of the maximum prizes in one range
+        for (int i = 0; i < n; ++i)
+        {
+            int target = a[i] + k;
+            int idx = upper_bound(a.begin(), a.end(), target) - a.begin();
+            dp[i] = (idx - i);
+        }
+
+        // Build max_suffix array for maximizing two segments
+        max_suffix[n-1] = dp[n-1];
+        for (int i = n-2; i >= 0; --i)
+        {
+            max_suffix[i] = max(max_suffix[i+1], dp[i]);
+        }
+
+        int res = dp[0];
+
+        for (int i = 0; i < n; ++i)
+        {
+            int end_of_first = i + dp[i] - 1;
+            if (end_of_first + 1 < n)
+                res = max(res, dp[i] + max_suffix[end_of_first + 1]);
+        }
+
+        return res;
+    }
+};

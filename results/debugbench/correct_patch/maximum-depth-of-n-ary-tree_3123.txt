@@ -1,0 +1,20 @@
+class Node:
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children if children is not None else []
+
+class Solution:
+    def maxDepth(self, root: 'Node') -> int:
+        if root is None:
+            return 0
+        else:
+            depth = 0
+            nodes_queue = [root]
+            while nodes_queue:
+                next_nodes_queue = []
+                for node_out in nodes_queue:
+                    if node_out.children is not None:
+                        next_nodes_queue.extend(node_out.children)
+                nodes_queue = next_nodes_queue
+                depth += 1
+            return depth

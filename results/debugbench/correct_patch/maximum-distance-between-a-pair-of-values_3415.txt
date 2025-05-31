@@ -1,0 +1,19 @@
+class Solution:
+    def maxDistance(self, nums1: List[int], nums2: List[int]) -> int:
+        def binary_search(left, right, target):
+            farthest_pos = -1
+            while left <= right:
+                mid = (left + right) // 2
+                if nums2[mid] >= target:
+                    farthest_pos = mid
+                    left = mid + 1
+                else:
+                    right = mid - 1
+            return farthest_pos
+
+        max_diff = 0
+        for i in range(len(nums1)):
+            j = binary_search(i, len(nums2) - 1, nums1[i])
+            if j != -1:
+                max_diff = max(max_diff, j - i)
+        return max_diff

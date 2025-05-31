@@ -1,0 +1,23 @@
+class Solution {
+    public int maxIceCream(int[] costs, int coins) {
+        // Create an array to count cost frequencies
+        int[] arr = new int[100001];
+        for (int cost : costs) arr[cost]++;
+        
+        int count = 0;
+        int index = 1;
+        
+        // Iterate over the costs and purchase within budget constraints
+        while (index < 100001) {
+            // We can afford arr[index] ice cream bars of cost index
+            if (arr[index] > 0 && coins >= index) {
+                // Determine the maximum number of ice cream bars we can buy at this price
+                int affordableBars = Math.min(arr[index], coins / index);
+                coins -= affordableBars * index; // Deduct total cost
+                count += affordableBars;         // Increment count
+            }
+            index++;
+        }
+        return count;
+    }
+}

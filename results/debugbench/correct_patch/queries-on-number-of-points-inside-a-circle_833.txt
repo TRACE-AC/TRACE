@@ -1,0 +1,31 @@
+class Solution {
+public:
+
+    bool isInsideCircle(int circleX, int pointX, int circleY, int pointY, int radius) {
+        int distSquared = (pointX - circleX) * (pointX - circleX) + (pointY - circleY) * (pointY - circleY);
+        return distSquared <= radius * radius;
+    }
+
+    vector<int> countPoints(vector<vector<int>>& points, vector<vector<int>>& queries) {
+        vector<int> ans;
+
+        for(const auto& query : queries) {
+            int circleX = query[0];
+            int circleY = query[1];
+            int radius = query[2];
+            int temp = 0;
+            
+            for(const auto& point : points) {
+                int pointX = point[0];
+                int pointY = point[1];
+
+                if(isInsideCircle(circleX, pointX, circleY, pointY, radius)) {
+                    temp++;
+                }
+            }
+
+            ans.push_back(temp);
+        }
+        return ans;
+    }
+};

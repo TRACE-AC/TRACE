@@ -1,0 +1,30 @@
+class Solution:
+    def isSubPath(self, head: Optional[ListNode], root: Optional[TreeNode]) -> bool:
+
+        if head is None:
+            return True
+
+        if root is None:
+            return False
+
+        # Begin matching from the current tree node
+        if self.isSame(head, root):
+            return True
+
+        # Continue searching in the left and right subtrees
+        return self.isSubPath(head, root.left) or self.isSubPath(head, root.right)
+
+    
+    def isSame(self, head, root):
+
+        if head is None:
+            return True
+        
+        if root is None:
+            return False
+
+        if head.val == root.val:
+            # Continue downwards only if both the list and tree nodes match
+            return self.isSame(head.next, root.left) or self.isSame(head.next, root.right)
+        
+        return False

@@ -1,0 +1,47 @@
+class Solution {
+    public int uniquePathsIII(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return 0;
+        }
+        
+        int row = 0;
+        int col = 0;
+        int emptySquares = 0;
+        
+        for(int i = 0; i < grid.length; i++) {
+            for(int j = 0; j < grid[0].length; j++) {
+                if(grid[i][j] == 1) {
+                    row = i;
+                    col = j;
+                }
+                if(grid[i][j] != -1) {
+                    emptySquares++;
+                }
+            }
+        }
+        
+        boolean[][] used = new boolean[grid.length][grid[0].length];
+        return count(grid, used, row, col, emptySquares - 1); // subtract the starting square from empty squares count
+    }
+    
+    private int count(int[][] grid, boolean[][] used, int row, int col, int remainingEmpty) {
+        if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length || grid[row][col] == -1 || used[row][col]) {
+            return 0;
+        }
+        
+        if (grid[row][col] == 2) {
+            return remainingEmpty == 0 ? 1 : 0; // if no empty squares are left, we've found a valid path
+        }
+        
+        used[row][col] = true;
+        
+        int paths = count(grid, used, row + 1, col, remainingEmpty - 1)
+                  + count(grid, used, row - 1, col, remainingEmpty - 1)
+                  + count(grid, used, row, col + 1, remainingEmpty - 1)
+                  + count(grid, used, row, col - 1, remainingEmpty - 1);
+        
+        used[row][col] = false;
+        
+        return paths;
+    }
+}

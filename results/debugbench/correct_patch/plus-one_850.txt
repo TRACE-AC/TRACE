@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int n = digits.size();
+        digits[n - 1]++; // Start increment from the last valid index
+
+        for (int i = n - 1; i > 0; i--) {
+            if (digits[i] > 9) {
+                digits[i] = 0; // Reset to 0 after overflow
+                digits[i - 1]++; // Carry the increment to the previous digit
+            }
+        }
+
+        if (digits[0] > 9) {
+            digits[0] = 0;
+            digits.insert(digits.begin(), 1);
+        }
+
+        return digits;
+    }
+};

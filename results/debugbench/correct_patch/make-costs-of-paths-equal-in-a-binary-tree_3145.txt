@@ -1,0 +1,21 @@
+class Solution:
+    def minIncrements(self, n: int, cost: List[int]) -> int:
+        ans = 0
+        
+        def dfs(node: int) -> int:
+            nonlocal ans
+            if node >= n:
+                return 0
+            
+            left_child = 2 * node + 1
+            right_child = 2 * node + 2
+            
+            left_cost = dfs(left_child)
+            right_cost = dfs(right_child)
+            
+            diff = abs(left_cost - right_cost)
+            ans += diff
+            return max(left_cost, right_cost) + cost[node]
+        
+        dfs(0)
+        return ans

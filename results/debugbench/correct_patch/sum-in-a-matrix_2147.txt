@@ -1,0 +1,26 @@
+class Solution {
+    public int matrixSum(int[][] nums) {
+        int score = 0;
+        int n = nums.length;
+
+        while (nums[0].length > 0) {
+            int maxInRound = 0;
+            for (int[] row : nums) {
+                Arrays.sort(row);
+                int largestInRow = row[row.length - 1];
+                maxInRound = Math.max(maxInRound, largestInRow);
+                row[row.length - 1] = Integer.MIN_VALUE; // logically remove the largest element
+            }
+            score += maxInRound;
+
+            // Update nums to remove columns with Integer.MIN_VALUE
+            for (int i = 0; i < n; i++) {
+                nums[i] = Arrays.stream(nums[i])
+                                .filter(num -> num != Integer.MIN_VALUE)
+                                .toArray();
+            }
+        }
+
+        return score;
+    }
+}

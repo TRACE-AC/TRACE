@@ -1,0 +1,35 @@
+class Solution {
+public:
+    set<int> winners;
+    map<int,int> losers;
+    
+    vector<vector<int>> findWinners(vector<vector<int>>& matches) {
+        for(int i=0;i<matches.size();i++) {
+            winners.insert(matches[i][0]);
+            losers[matches[i][1]]++;
+        }
+        
+        vector<vector<int>> ans;
+        vector<int> temp1;
+        for(auto& winner : winners) {
+            if(losers.find(winner) == losers.end()) {
+                temp1.push_back(winner);
+            }
+        }
+        
+        vector<int> temp2;
+        for(auto& loser : losers) {
+            if(loser.second == 1) {
+                temp2.push_back(loser.first);
+            }
+        }
+        
+        sort(temp1.begin(), temp1.end());
+        sort(temp2.begin(), temp2.end());
+        
+        ans.push_back(temp1);
+        ans.push_back(temp2);
+        
+        return ans;
+    }
+};

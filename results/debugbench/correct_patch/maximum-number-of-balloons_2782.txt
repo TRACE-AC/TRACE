@@ -1,0 +1,30 @@
+class Solution {
+    public int maxNumberOfBalloons(String text) {
+        final int[][] cache = new int[2][5];
+        cache[0][0] = 98;  // ASCII value for 'b'
+        cache[0][1] = 97;  // ASCII value for 'a'
+        cache[0][2] = 108; // ASCII value for 'l'
+        cache[0][3] = 110; // ASCII value for 'n'
+        cache[0][4] = 111; // ASCII value for 'o'
+        
+        for (char ch : text.toCharArray()) {
+            final int intValue = ch;
+            for (int i = 0; i < 5; i++) {
+                if (intValue == cache[0][i]) {
+                    cache[1][i]++;
+                    break;
+                }
+            }
+        }
+
+        cache[1][2] /= 2;  // Divide by 2 for 'l'
+        cache[1][4] /= 2;  // Divide by 2 for 'o'
+
+        int min = Integer.MAX_VALUE;
+        for (int frequency: cache[1]) {
+            min = Math.min(min, frequency);
+        }
+
+        return min;
+    }
+}

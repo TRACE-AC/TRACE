@@ -1,0 +1,11 @@
+class Solution:
+    def arrayRankTransform(self, arr: List[int]) -> List[int]:
+        list1 = []
+        x = sorted(set(arr))
+        dict1 = {}
+        for i, val in enumerate(x, start=1):
+            dict1[val] = i
+        for j in arr:
+            y = dict1[j]
+            list1.append(y)
+        return list1

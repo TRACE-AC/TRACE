@@ -1,0 +1,19 @@
+class MyCalendar {
+public:
+    map<int, int> m;
+    MyCalendar() {
+        
+    }
+    
+    bool book(int start, int end) {
+        auto p = m.begin();
+        while (p != m.end()) {
+            if (!(end <= p->first || start >= p->second)) {
+                return false;
+            }
+            ++p;
+        }
+        m[start] = end;
+        return true;
+    }
+};

@@ -1,0 +1,63 @@
+class Solution {
+public:
+    vector<int> r = {-1, 0, 1, 0};
+    vector<int> c = {0, 1, 0, -1};
+
+    void dfs(int row, int col, vector<pair<int, int>>& v, vector<vector<int>>& vis, vector<vector<int>>& grid) {
+        int n = grid.size();
+        vis[row][col] = 1;
+        v.push_back({row, col});
+        for (int i = 0; i < 4; i++) {
+            int nrow = row + r[i];
+            int ncol = col + c[i];
+            if (nrow >= 0 && ncol >= 0 && nrow < n && ncol < n && vis[nrow][ncol] == 0 && grid[nrow][ncol] == 1) {
+                dfs(nrow, ncol, v, vis, grid);
+            }
+        }
+    }
+
+    int shortestBridge(vector<vector<int>>& grid) {
+        vector<pair<int, int>> v1, v2;
+        int n = grid.size();
+        vector<vector<int>> vis(n, vector<int>(n, 0));
+        bool found = false;
+
+        // Find and mark the first island, storing coordinates in v1
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1 && vis[i][j] == 0) {
+                    dfs(i, j, v1, vis, grid);
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+
+        // Begin BFS from the entire first island
+        queue<pair<int, int>> q;
+        for (auto it : v1) q.push(it);
+        int steps = 0;
+        
+        // Perform BFS to expand from the first island until the second island is reached
+        while (!q.empty()) {
+            int size = q.size();
+            while (size--) {
+                auto [row, col] = q.front(); q.pop();
+                for (int i = 0; i < 4; i++) {
+                    int nrow = row + r[i];
+                    int ncol = col + c[i];
+                    if (nrow >= 0 && ncol >= 0 && nrow < n && ncol < n && vis[nrow][ncol] == 0) {
+                        vis[nrow][ncol] = 1;
+                        if (grid[nrow][ncol] == 1) {
+                            return steps;
+                        }
+                        q.push({nrow, ncol});
+                    }
+                }
+            }
+            steps++;
+        }
+        return steps;
+    }
+};

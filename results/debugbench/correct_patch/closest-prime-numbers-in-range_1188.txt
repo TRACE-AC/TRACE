@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<int> closestPrimes(int left, int right) {
+        if(left == 1) left++;
+        
+        vector<bool> isPrime(right + 1, true);
+        isPrime[0] = isPrime[1] = false; // explicitly mark 0 and 1 as non-prime
+        
+        for(int i = 2; i * i <= right; i++) {
+            if(isPrime[i]) {
+                for(int j = i * i; j <= right; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+        
+        int a = -1, b = -1;
+        int minDiff = INT_MAX;
+        
+        // Correctly find the first prime >= left
+        int firstPrime = -1;
+        for(int i = left; i <= right; i++) {
+            if(isPrime[i]) {
+                firstPrime = i;
+                break;
+            }
+        }
+        
+        if(firstPrime == -1) return {a, b}; // No prime numbers in range
+        
+        for(int j = firstPrime + 1; j <= right; j++) {
+            if(isPrime[j]) {
+                int diff = j - firstPrime;
+                if(diff < minDiff) {
+                    minDiff = diff;
+                    a = firstPrime;
+                    b = j;
+                }
+                firstPrime = j; // update for the next iteration
+            }
+        }
+        
+        return {a, b};
+    }
+};

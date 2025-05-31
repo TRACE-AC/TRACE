@@ -1,0 +1,9 @@
+class Solution:
+    def totalMoney(self, n: int) -> int:
+        ans = 0
+        for i in range(n):
+            week_number = i // 7
+            start_value = 1 + week_number
+            day_offset = i % 7
+            ans += start_value + day_offset
+        return ans

@@ -1,0 +1,12 @@
+class Solution {
+    public boolean isStrictlyPalindromic(int n) {
+        for (int i = 2; i <= n - 2; i++) {
+            String numStr = Integer.toString(n, i);
+            String reverseStr = new StringBuilder(numStr).reverse().toString();
+            if (!numStr.equals(reverseStr)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

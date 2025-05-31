@@ -1,0 +1,25 @@
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    bool carPooling(vector<vector<int>>& trips, int capacity) {
+        vector<pair<int, int>> events;
+        for (const auto& trip : trips) {
+            events.emplace_back(trip[1], trip[0]);  // Pickup event
+            events.emplace_back(trip[2], -trip[0]); // Drop-off event
+        }
+
+        sort(events.begin(), events.end());
+
+        int current_capacity = 0;
+        for (const auto& event : events) {
+            current_capacity += event.second;
+            if (current_capacity > capacity) return false;
+        }
+        return true;
+    }
+};

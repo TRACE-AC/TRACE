@@ -1,0 +1,10 @@
+class Solution:
+    def flipgame(self, fronts: List[int], backs: List[int]) -> int:
+        bad = set(i for i, j in zip(fronts, backs) if i == j)
+        possible_good = set(fronts) | set(backs)
+        
+        for number in sorted(possible_good):
+            if number not in bad:
+                return number
+                
+        return 0

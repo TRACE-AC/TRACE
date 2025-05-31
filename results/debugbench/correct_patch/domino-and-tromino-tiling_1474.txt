@@ -1,0 +1,24 @@
+import java.util.Arrays;
+
+class Solution {
+    private int[] dp;
+    int MOD = 1000000007;
+
+    public long solve(int n) {
+        if (n == 0) return 1;
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+
+        if (dp[n] != -1) return dp[n];
+
+        long result = (2 * solve(n - 1) % MOD + solve(n - 3) % MOD) % MOD;
+        return dp[n] = (int) result;
+    }
+
+    public int numTilings(int n) {
+        this.dp = new int[n + 1];
+        Arrays.fill(dp, -1);
+
+        return (int) solve(n) % MOD;
+    }
+}

@@ -1,0 +1,31 @@
+class Solution {
+    public int maxValue(int n, int index, int maxSum) {
+        int left = 1, right = maxSum;  // Adjusting initial boundaries for uniform distribution
+
+        while (left < right) {
+            int middle = (left + right + 1) / 2;
+            if (isPossible(n, index, maxSum, middle))
+                left = middle;
+            else
+                right = middle - 1;
+        }
+        return left;
+    }
+
+    private boolean isPossible(int n, int index, int maxSum, int value) {
+        long sumBefore = getSum(value, index);
+        long sumAfter = getSum(value, n - index - 1);
+
+        return sumBefore + sumAfter - value <= maxSum;
+    }
+
+    // Helper method to calculate sum with gradual decrement
+    private long getSum(int peak, int length) {
+        if (length >= peak) {
+            int rest = length - (peak - 1);
+            return (long) (peak + 1) * peak / 2 + rest;
+        } else {
+            return (long) (peak - length + peak) * (length + 1) / 2;
+        }
+    }
+}

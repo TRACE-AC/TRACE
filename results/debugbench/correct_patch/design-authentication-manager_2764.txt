@@ -1,0 +1,34 @@
+class AuthenticationManager {
+
+    int timeToLive;
+    TreeSet<Integer> treeSet;
+    Map<String, Integer> map;
+    public AuthenticationManager(int timeToLive) {
+        this.timeToLive = timeToLive;
+        treeSet = new TreeSet<>();
+        map = new HashMap<>();
+    }
+    
+    public void generate(String tokenId, int currentTime) {
+        map.put(tokenId, currentTime + timeToLive);
+        treeSet.add(currentTime + timeToLive);
+    }
+    
+    public void renew(String tokenId, int currentTime) {
+        
+        Integer time = map.get(tokenId);
+        if (time == null || time <= currentTime) return;
+       
+        map.put(tokenId, currentTime + timeToLive);
+        treeSet.remove(time);
+        treeSet.add(currentTime + timeToLive);
+        
+        while (!treeSet.isEmpty() && treeSet.lower(currentTime) != null) {
+            treeSet.remove(treeSet.lower(currentTime));
+        }
+    }
+    
+    public int countUnexpiredTokens(int currentTime) {
+        return treeSet.tailSet(currentTime, false).size();
+    }
+}

@@ -1,0 +1,28 @@
+class Foo {
+    private volatile int num = 1;
+
+    public synchronized void first(Runnable printFirst) throws InterruptedException {
+        while (num != 1) {
+            wait();
+        }
+        printFirst.run();
+        num = 2;
+        notifyAll();
+    }
+
+    public synchronized void second(Runnable printSecond) throws InterruptedException {
+        while (num != 2) {
+            wait();
+        }
+        printSecond.run();
+        num = 3;
+        notifyAll();
+    }
+
+    public synchronized void third(Runnable printThird) throws InterruptedException {
+        while (num != 3) {
+            wait();
+        }
+        printThird.run();
+    }
+}

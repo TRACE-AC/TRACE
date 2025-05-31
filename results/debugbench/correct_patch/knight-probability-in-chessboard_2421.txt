@@ -1,0 +1,27 @@
+class Solution {
+    public double knightProbability(int n, int k, int row, int column) {
+        int[][] dir = {{-2, -1}, {-1, -2}, {1, -2}, {2, -1}, {2, 1}, {1, 2}, {-1, 2}, {-2, 1}};
+        double[][][] dp = new double[k + 1][n][n];
+        dp[0][row][column] = 1.0;
+        for (int i = 1; i <= k; i++) {
+            for (int r = 0; r < n; r++) {
+                for (int c = 0; c < n; c++) {
+                    for (int[] d : dir) {
+                        int newRow = r + d[0];
+                        int newCol = c + d[1];
+                        if (newRow >= 0 && newRow < n && newCol >= 0 && newCol < n) {
+                            dp[i][r][c] += dp[i - 1][newRow][newCol] / 8.0;
+                        }
+                    }
+                }
+            }
+        }
+        double output = 0.0;
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+                output += dp[k][r][c];
+            }
+        }
+        return output;
+    }
+}

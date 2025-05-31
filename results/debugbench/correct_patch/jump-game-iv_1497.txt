@@ -1,0 +1,46 @@
+class Solution {
+    public int minJumps(int[] arr) {
+        Map<Integer,ArrayList<Integer>> hm = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            if (!hm.containsKey(arr[i])) {
+                hm.put(arr[i], new ArrayList<>());
+            }
+            hm.get(arr[i]).add(i);
+        }
+        
+        boolean[] vis = new boolean[arr.length];
+        Queue<Integer> q = new LinkedList<>();
+        q.add(0);
+        vis[0] = true; // mark as visited immediately to avoid re-visiting
+        int cnt = 0;
+
+        while (!q.isEmpty()) {
+            for (int k = q.size(); k > 0; k--) {
+                int n = q.remove();
+                if (n == arr.length - 1) return cnt;
+
+                ArrayList<Integer> al = hm.get(arr[n]);
+                // Add boundary checked neighbors first
+                if (n - 1 >= 0 && !vis[n - 1]) {
+                    q.add(n - 1);
+                    vis[n - 1] = true;
+                }
+                if (n + 1 < arr.length && !vis[n + 1]) {
+                    q.add(n + 1);
+                    vis[n + 1] = true;
+                }
+                // Visit other indices with the same value
+                for (int i : al) {
+                    if (!vis[i]) {
+                        q.add(i);
+                        vis[i] = true;
+                    }
+                }
+                // Clear indices to avoid revisiting
+                al.clear();
+            }
+            cnt++;
+        }
+        return 0;
+    }
+}

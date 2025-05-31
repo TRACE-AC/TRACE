@@ -1,0 +1,21 @@
+class Solution {
+public:
+    long long dividePlayers(vector<int>& skill) {
+        int n=skill.size();
+        sort(skill.begin(), skill.end());
+        long long ans=0;
+        int low=0, high=n-1;
+        int skl=skill[low]+skill[high];
+
+        if (skill.front() + skill.back() != skl) return -1;
+
+        while(low < high) {
+            if( (skill[low]+skill[high]) != skl) return -1;
+            ans += skill[low] * skill[high];
+            low++;
+            high--;
+        }
+
+        return ans;
+    }
+};

@@ -1,0 +1,30 @@
+import java.util.HashMap;
+
+class Solution {
+    public int firstCompleteIndex(int[] arr, int[][] mat) {
+        int m = mat.length, n = mat[0].length;
+        int[] row = new int[m];
+        int[] col = new int[n];
+        
+        // Insert HashMap Initialization
+        HashMap<Integer, int[]> posMap = new HashMap<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                posMap.put(mat[i][j], new int[]{i, j});
+            }
+        }
+        
+        // Direct access using HashMap
+        for (int ind = 0; ind < arr.length; ind++) {
+            int[] position = posMap.get(arr[ind]);
+            int i = position[0];
+            int j = position[1];
+            row[i]++;
+            col[j]++;
+            if (row[i] == n || col[j] == m) {
+                return ind;
+            }
+        }
+        return -1; // In case an index is not found (shouldn't happen with correct input)
+    }
+}

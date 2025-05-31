@@ -1,0 +1,32 @@
+class Solution {
+public:
+    const int inf = 0x3f3f3f3f;
+    int minimumIncompatibility(vector<int>& nums, int k) {
+      int n = nums.size();
+      int sz = n/k;
+      sort(nums.begin(), nums.end());
+      int dp[1<<n][n];
+      for (int i = 0; i < (1<<n); ++i) {
+        std::fill(dp[i], dp[i] + n, inf);
+      }
+      for (int i = 0; i < n; ++i) { dp[0][i] = 0; }
+      for (int m = 0; m < (1<<n)-1; ++m) {
+        int cnt = __builtin_popcount(m);
+        for (int i = 0; i < n; ++i) {
+          if (dp[m][i] == inf) { continue; }
+          if (cnt%sz == 0) {
+            int j = __builtin_ffs(~m)-1;
+            if (j < n) { 
+              dp[m|(1<<j)][j] = min(dp[m|(1<<j)][j],dp[m][i]);
+            }
+          } else {
+            for (int j = i+1; j < n; ++j) {
+              if ((m&(1<<j)) || nums[j] == nums[i]) { continue; }
+              dp[m|(1<<j)][j] = min(dp[m|(1<<j)][j],dp[m][i]+nums[j]-nums[i]);
+            }
+          }
+        }
+      }
+      return dp[(1<<n)-1][n-1] == inf? -1: dp[(1<<n)-1][n-1];
+    }
+};

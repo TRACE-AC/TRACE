@@ -1,0 +1,26 @@
+class Solution {
+public:
+    
+    bool valid(int n, string s, int sum) {
+        if (s == "") return sum == n;
+
+        for (int i = 1; i <= s.size(); i++) {
+            int x = stoi(s.substr(0, i));
+            if (valid(n, s.substr(i), sum + x)) return true;
+        }
+        
+        return false;
+    }
+
+    int punishmentNumber(int n) {
+        int ans = 0;
+
+        for (int i = 1; i <= n; i++) {
+            int sq = i * i;
+            string x = to_string(sq);
+            if (valid(i, x, 0)) ans += i * i;
+        }
+        
+        return ans;
+    }
+};

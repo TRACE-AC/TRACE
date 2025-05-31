@@ -1,0 +1,27 @@
+from typing import List
+from collections import defaultdict, deque
+
+class Solution:
+    def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -> List[str]:
+        dct = defaultdict(list)
+        indegree = defaultdict(int)
+        n = len(recipes)
+
+        for i in range(n):
+            for ing in ingredients[i]:
+                dct[ing].append(recipes[i])
+                indegree[recipes[i]] += 1
+
+        st = deque(supplies)
+        flst = []
+
+        while st:
+            x = st.popleft()
+            if x in recipes:
+                flst.append(x)
+            for recipe in dct[x]:
+                indegree[recipe] -= 1
+                if indegree[recipe] == 0:
+                    st.append(recipe)
+
+        return flst

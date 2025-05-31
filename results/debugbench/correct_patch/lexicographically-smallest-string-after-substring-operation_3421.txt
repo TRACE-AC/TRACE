@@ -1,0 +1,26 @@
+class Solution:
+    def smallestString(self, s: str) -> str:
+        if len(set(s)) == 1 and s[0] != 'a':  # Handle the case where all characters are the same and not 'a'
+            return chr(ord(s[0]) - 1) * len(s)
+
+        ans = ""
+        change = False
+        
+        i = 0
+        while i < len(s):
+            if s[i] == 'a':
+                ans += 'a'
+                i += 1
+            else:
+                break
+        
+        while i < len(s) and s[i] != 'a':  # Apply transformation until 'a' is encountered
+            ans += chr(ord(s[i]) - 1)
+            change = True
+            i += 1
+        
+        if not change:  # If no transformation was done, apply the 'z' rule at the end
+            ans = ans[:-1] + 'z'
+
+        ans += s[i:]  # Append the remaining substring from original string
+        return ans

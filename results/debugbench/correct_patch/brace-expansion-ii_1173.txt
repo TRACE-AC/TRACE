@@ -1,0 +1,48 @@
+class Solution {
+public:
+    
+    vector<string> multiply(vector<string>& a, vector<string>& b) {
+        if (a.empty()) return b;
+        if (b.empty()) return a;
+        vector<string> ans;
+        for (auto& i : a) {
+            for (auto& j : b) ans.push_back(i + j);
+        }
+        return ans;
+    }
+    
+    vector<string> braceExpansionII(string expression) {
+        vector<string> res, curr;
+        stack<vector<string>> st;
+        
+        for (auto& x : expression) {
+            if (x >= 'a' and x <= 'z') {
+                if (curr.empty()) curr.push_back(string(1, x));
+                else for (auto& i : curr) i += x;
+            }
+            else if (x == '{') {
+                st.push(res); 
+                st.push(curr);
+                res.clear();
+                curr.clear();
+            }
+            else if (x == '}') {
+                vector<string> preCurr = st.top(); st.pop();
+                vector<string> preRes = st.top(); st.pop();
+                res.insert(res.end(), curr.begin(), curr.end());
+                curr = multiply(preCurr, res);
+                res = preRes;
+            }
+            else if (x == ',') {
+                res.insert(res.end(), curr.begin(), curr.end());
+                curr.clear();
+            }
+        }
+        
+        res.insert(res.end(), curr.begin(), curr.end());
+        sort(res.begin(), res.end());
+        auto last = unique(res.begin(), res.end());
+        res.erase(last, res.end());
+        return res;
+    }
+};

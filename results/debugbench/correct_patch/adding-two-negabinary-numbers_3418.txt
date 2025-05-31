@@ -1,0 +1,22 @@
+class Solution:
+    def addNegabinary(self, A, B):
+        res = []
+        carry = 0
+        i, j = len(A) - 1, len(B) - 1  # Start from the least significant bit
+        while i >= 0 or j >= 0 or carry:
+            if i >= 0:
+                carry += A[i]
+                i -= 1
+            if j >= 0:
+                carry += B[j]
+                j -= 1
+
+            res.append(carry & 1)  # Add the least significant bit to the result
+            carry = -(carry >> 1)  # Adjust carry for negabinary
+
+            if carry < -1:
+                carry += 2
+                
+        while len(res) > 1 and res[-1] == 0:
+            res.pop()
+        return res[::-1]

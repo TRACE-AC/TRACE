@@ -1,0 +1,39 @@
+from typing import List
+import collections
+
+class Solution:
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        if not s or not words:
+            return []
+
+        wlen = len(words[0])
+        slen = wlen * len(words)
+        res = []
+
+        occ = collections.Counter(words)
+
+        for i in range(wlen):
+            start = i
+            track = collections.defaultdict(int)
+            count = 0
+
+            for end in range(i, len(s), wlen):
+                w = s[end:end + wlen]
+                if w in occ:
+                    track[w] += 1
+                    count += 1
+                    while track[w] > occ[w]:
+                        left_word = s[start:start + wlen]
+                        track[left_word] -= 1
+                        count -= 1
+                        start += wlen
+                        
+                else:
+                    track.clear()
+                    count = 0
+                    start = end + wlen
+
+                if count == len(words):
+                    res.append(start)
+
+        return res

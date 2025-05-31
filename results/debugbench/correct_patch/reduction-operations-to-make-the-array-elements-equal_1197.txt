@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int reductionOperations(vector<int>& nums) {
+        int ans = 0;
+        map<int, int> mp;
+        for (auto &i : nums) {
+            mp[i]++;
+        }
+        auto it = mp.rbegin();
+        while (it != mp.rend()) {
+            auto next = it;
+            ++next;
+            if (next != mp.rend()) {
+                ans += it->second;
+                next->second += it->second;
+            }
+            ++it;
+        }
+        return ans;
+    }
+};

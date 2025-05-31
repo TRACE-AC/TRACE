@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int minSwaps(string s) {
+        int unmatchedClose = 0, swaps = 0;
+        for (char& ch : s) {
+            if (ch == '[') {
+                unmatchedClose++;
+            } else {
+                if (unmatchedClose > 0) {
+                    unmatchedClose--;
+                } else {
+                    swaps++;
+                    unmatchedClose++;
+                }
+            }
+        }
+        return swaps;
+    }
+};

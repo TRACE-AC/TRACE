@@ -1,0 +1,44 @@
+class TreeAncestor {
+public:
+    int n;
+
+    vector<int>belong;
+    vector<int>ind;
+    vector<bool>leaf;
+    vector<vector<int>>path_leaf;
+
+    TreeAncestor(int n, vector<int>& parent) {
+        this->n = n;
+        path_leaf.resize(n);
+        belong.resize(n, -1);
+        ind.resize(n, -1);
+        leaf.resize(n, 1);
+
+        for (int i = 0; i < n; i++) {
+            if (parent[i] != -1)
+                leaf[parent[i]] = 0;
+        }
+        
+        for (int i = 0; i < n; i++) {
+            if (!leaf[i]) continue;
+            int curr = i;
+            belong[curr] = curr;
+            while (curr != -1) {
+                curr = parent[curr];
+                path_leaf[i].push_back(curr);
+                if (curr != -1) {
+                    belong[curr] = i;
+                    ind[curr] = path_leaf[i].size() - 1;
+                }
+            }
+        }
+    }
+    
+    int getKthAncestor(int node, int k) {
+        int index = k + ind[node];
+        if (index >= path_leaf[belong[node]].size()) {
+            return -1;
+        }
+        return path_leaf[belong[node]][index];
+    }
+};

@@ -1,0 +1,19 @@
+class FrequencyTracker {
+public:
+    unordered_map<int,int> x,y;
+    void add(int number) {
+        if(y[x[number]] > 0) y[x[number]]--; // decrement old frequency count
+        x[number]++; 
+        y[x[number]]++; // increment new frequency count
+    }
+    void deleteOne(int number) {
+        if(x[number] > 0) { // check if number exists before deleting
+            if(y[x[number]] > 0) y[x[number]]--; // decrement old frequency count
+            x[number]--;
+            if(x[number] > 0) y[x[number]]++; // increment new frequency count if > 0
+        }
+    }
+    bool hasFrequency(int frequency) {
+        return y[frequency] > 0; // check if any number has the specific frequency
+    }
+};

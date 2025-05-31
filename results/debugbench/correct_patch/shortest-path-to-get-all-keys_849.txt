@@ -1,0 +1,72 @@
+#include <bitset>
+
+class Solution {
+public:
+    int dir[4][2] = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}}; 
+
+    int shortestPathAllKeys(vector<string>& grid) {
+        if (grid.empty())
+            return -1;
+
+        int m = grid.size();
+        int n = grid[0].size();
+        queue<pair<pair<int, int>, bitset<6>>> que;
+        vector<vector<bitset<64>>> mapKey(m, vector<bitset<64>>(n, 0));
+        bitset<6> target;
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if ('a' <= grid[i][j] && grid[i][j] <= 'f') {
+                    target.set(grid[i][j] - 'a');
+                    continue;
+                } 
+                if (grid[i][j] == '@') {
+                    que.emplace(pair<int, int>(i, j), bitset<6>());
+                    mapKey[i][j] = 1;
+                }
+            }
+        }
+
+        int step = 0;
+        while (!que.empty()) {
+            int size = que.size();
+            for (int s = 0; s < size; s++) {
+                int i = que.front().first.first;
+                int j = que.front().first.second;
+                bitset<6> key = que.front().second;
+                que.pop();
+
+                if ('a' <= grid[i][j] && grid[i][j] <= 'f') {
+                    key.set(grid[i][j] - 'a');
+                    if (key == target)
+                        return step;
+
+                    mapKey[i][j].set(key.to_ulong());
+                }
+
+                for (int d = 0; d < 4; d++) {
+                    int newi = i + dir[d][0];
+                    int newj = j + dir[d][1];
+
+                    if (!(0 <= newi && newi < m && 0 <= newj && newj < n))
+                        continue;
+
+                    int val = grid[newi][newj];
+                    if (val == '#')
+                        continue;
+
+                    if ('A' <= val && val <= 'F' && !key.test(val - 'A'))
+                        continue;
+
+                    if (mapKey[newi][newj].test(key.to_ulong()))
+                        continue;
+
+                    mapKey[newi][newj].set(key.to_ulong());
+                    que.emplace(pair<int, int>(newi, newj), key);
+                }
+            }
+            step++;
+        }
+        return -1;
+    }
+};

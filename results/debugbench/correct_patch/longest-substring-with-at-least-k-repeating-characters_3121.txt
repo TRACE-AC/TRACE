@@ -1,0 +1,19 @@
+from collections import defaultdict
+
+class Solution:
+    def longestSubstring(self, s: str, k: int) -> int:
+        # Create a frequency dictionary to store counts of each character
+        frequency = defaultdict(int)
+        for char in s:
+            frequency[char] += 1
+        
+        # Find the first index where frequency is less than k
+        for i in range(len(s)):
+            if frequency[s[i]] < k:
+                # Divide the problem at position i and solve recursively
+                left = self.longestSubstring(s[:i], k)
+                right = self.longestSubstring(s[i+1:], k)
+                return max(left, right)
+        
+        # If all characters' frequencies are enough, return the length of the string
+        return len(s)

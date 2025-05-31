@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int Rem(int a) {
+        return (a * (a + 1)) / 2;
+    }
+    int totalMoney(int n) {
+        int ans = 0, dif = 28;
+        int a = n / 7;
+        
+        for (int i = 0; i < a; i++) {
+            ans += dif;
+            dif += 7;
+        }
+
+        int b = n % 7;
+        int ad = 0;
+        for (int i = 0; i < b; i++) {
+            ad += a + i + 1;
+        }
+
+        ans += ad;
+
+        return ans;
+    }
+};

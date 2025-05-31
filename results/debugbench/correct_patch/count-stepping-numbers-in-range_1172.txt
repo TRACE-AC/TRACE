@@ -1,0 +1,39 @@
+class Solution {
+public:
+    #define mod 1000000007
+    long long dp[102][10][2][2];
+    
+    long long f(string &r,int n,int pre,int leadingZero,int tight){
+        if(n==0) return 1;
+        
+        if(dp[n][pre][leadingZero][tight]!=-1) return dp[n][pre][leadingZero][tight];
+        long long up = tight ? (r[r.size()-n]-'0') : 9, ans = 0;
+        
+        for(int i = 0; i <= up; i++) {
+            if(leadingZero || (std::abs(pre - i) == 1)) {
+                ans = (ans + f(r, n-1, i, leadingZero && i == 0, tight && (i == up))) % mod; 
+            }
+        }
+        
+        return dp[n][pre][leadingZero][tight] = ans;
+    }
+    
+    int countSteppingNumbers(string low, string high) {
+        memset(dp, -1, sizeof(dp));
+        long long r = f(high, high.size(), 0, 1, 1);
+        
+        for (int i = low.size() - 1; i >= 0; i--) {
+            if (low[i] > '0') {
+                low[i]--;
+                break;
+            } else {
+                low[i] = '9';
+            }
+        }
+        
+        memset(dp, -1, sizeof(dp));
+        long long l = f(low, low.size(), 0, 1, 1);
+        
+        return (r - l + mod ) % mod;
+    }
+};

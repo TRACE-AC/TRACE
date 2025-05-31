@@ -1,0 +1,51 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    string BFS(TreeNode* root)
+    {
+        if(!root) return "";
+        queue<pair<TreeNode*,string>> q;
+        vector<string> ans;
+        string s = "";
+        s+=root->val+'a'; 
+        q.push({root,s});
+        while(!q.empty())
+        {
+            TreeNode* node = q.front().first;
+            string str = q.front().second;
+            q.pop();
+            if(!node->left && !node->right)
+            {
+                reverse(str.begin(),str.end());
+                ans.push_back(str);
+            }
+            if(node->left)
+            {
+                string tmp = str;
+                tmp+=node->left->val+'a';
+                q.push({node->left,tmp});
+            }
+            if(node->right)
+            {
+                string tmp = str;
+                tmp+=node->right->val+'a';
+                q.push({node->right,tmp});
+            }
+        }
+        sort(ans.begin(),ans.end());
+        return ans[0];
+    }
+    string smallestFromLeaf(TreeNode* root) {
+       return BFS(root);
+    }
+};

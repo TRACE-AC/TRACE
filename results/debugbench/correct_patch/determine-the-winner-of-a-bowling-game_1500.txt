@@ -1,0 +1,26 @@
+class Solution {
+    public int isWinner(int[] player1, int[] player2) {
+        int p1 = player1[0], p2 = player2[0];
+        for (int i = 1; i < player1.length; i++) {
+            int j = i - 1;
+            int k = i - 2;
+            if ((j >= 0 && player1[j] == 10) || (k >= 0 && player1[k] == 10)) {
+                p1 += 2 * player1[i];
+            } else {
+                p1 += player1[i];
+            }
+        }
+        for (int l = 1; l < player2.length; l++) {
+            int m = l - 1;
+            int n = l - 2;
+            if ((m >= 0 && player2[m] == 10) || (n >= 0 && player2[n] == 10)) {
+                p2 += 2 * player2[l];
+            } else {
+                p2 += player2[l];
+            }
+        }
+        if (p1 > p2) return 1;
+        else if (p1 == p2) return 0;
+        else return 2;
+    }
+}

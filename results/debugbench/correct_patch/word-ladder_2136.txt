@@ -1,0 +1,44 @@
+class Pair {
+    String first;
+    int second;
+    Pair(String first, int second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Queue<Pair> q = new ArrayDeque<>();
+        q.add(new Pair(beginWord, 1));
+        HashSet<String> set = new HashSet<>();
+        for (String word : wordList) {
+            set.add(word);
+        }
+        
+        if (!set.contains(endWord)) return 0; // inserted missed statement
+
+        set.remove(beginWord);
+        while (!q.isEmpty()) {
+            String rem = q.peek().first;
+            int steps = q.peek().second;
+            q.remove();
+
+            for (int i = 0; i < rem.length(); i++) {
+                for (char ch = 'a'; ch <= 'z'; ch++) {
+                    char replacedCharArray[] = rem.toCharArray();
+                    replacedCharArray[i] = ch;
+                    String replacedWord = new String(replacedCharArray);
+                    if (replacedWord.equals(endWord)) {
+                        return steps + 1;
+                    }
+                    if (set.contains(replacedWord)) {
+                        set.remove(replacedWord);
+                        q.add(new Pair(replacedWord, steps + 1));
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+}

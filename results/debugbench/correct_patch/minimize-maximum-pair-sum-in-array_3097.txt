@@ -1,0 +1,10 @@
+class Solution:
+    def minPairSum(self, nums: List[int]) -> int:
+        nums.sort()
+        left, right = 0, len(nums) - 1
+        list2 = []
+        while left < right:
+            list2.append(nums[right] + nums[left])
+            left += 1
+            right -= 1
+        return max(list2)

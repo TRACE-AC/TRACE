@@ -1,0 +1,17 @@
+class Solution:
+    def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
+        # Collect max frequency counts across all words in words2
+        max_freq = Counter()
+        for word in words2:
+            word_count = Counter(word)
+            for char in word_count:
+                max_freq[char] = max(max_freq[char], word_count[char])
+                
+        # Find words in words1 that are universal
+        universal_words = []
+        for w1 in words1:
+            w1_count = Counter(w1)
+            if all(w1_count[char] >= max_freq[char] for char in max_freq):
+                universal_words.append(w1)
+        
+        return universal_words

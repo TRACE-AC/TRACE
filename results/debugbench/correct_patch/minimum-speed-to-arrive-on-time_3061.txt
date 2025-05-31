@@ -1,0 +1,25 @@
+from math import ceil
+from typing import List
+
+class Solution:
+    def minSpeedOnTime(self, dist: List[int], hour: float) -> int:
+        n = len(dist)
+        if n - 1 >= hour:
+            return -1
+        
+        left, right = 1, max(dist) * 100
+
+        while left < right:
+            mid = left + (right - left) // 2
+            time = 0
+
+            for i in range(n - 1):
+                time += ceil(dist[i] / mid)
+            time += dist[-1] / mid
+
+            if time <= hour:
+                right = mid
+            else:
+                left = mid + 1
+
+        return left if sum(ceil(dist[i] / left) for i in range(n - 1)) + dist[-1] / left <= hour else -1

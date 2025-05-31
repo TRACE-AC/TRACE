@@ -1,0 +1,20 @@
+class Solution:
+  def answerQueries(self, nums: List[int], queries: List[int]) -> List[int]:
+    nums.sort()
+    sums = [0]
+    for num in nums:
+      sums.append(sums[-1] + num)
+      
+    def bSearch(q):
+      l, r = 0, len(sums) - 1
+      while l < r:
+        mid = (l + r) // 2
+        if sums[mid] <= q:
+          l = mid + 1
+        else:
+          r = mid
+      if sums[l] > q:  # Ensure l is in the valid range
+        return l - 1
+      return l
+
+    return [bSearch(q) for q in queries]

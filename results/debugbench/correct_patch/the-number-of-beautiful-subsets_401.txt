@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int beautifulSubsets(vector<int>& nums, int k) {
+        vector<int> cur;
+        return helper(nums, k, cur, 0);
+    }
+private:
+    int helper(vector<int>& nums, int k, vector<int>& cur, int start) {
+        int cnt = 0;
+        for (int i = start; i < nums.size(); ++i) {
+            if (!test(cur, nums[i], k))
+                continue;
+            cur.push_back(nums[i]);
+            cnt += 1 + helper(nums, k, cur, i + 1);
+            cur.pop_back();
+        }
+        return cnt;
+    }
+    bool test(vector<int>& cur, int num, int k) {
+        for (auto &c : cur)
+            if (abs(num - c) == k)
+                return false;
+        return true;
+    }
+};
